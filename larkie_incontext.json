@@ -1,0 +1,110 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "anima-base-v1.0.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_3_06b_base.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": ["1", 0],
+      "lora_name": "anima-incontext-character.safetensors",
+      "strength_model": 1.0
+    }
+  },
+  "10": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "larkie_reference_key_art.webp"
+    }
+  },
+  "12": {
+    "class_type": "AnimaRefEncode",
+    "inputs": {
+      "vae": ["3", 0],
+      "image": ["10", 0],
+      "target_width": 1024,
+      "target_height": 1536
+    }
+  },
+  "15": {
+    "class_type": "AnimaInContextApply",
+    "inputs": {
+      "model": ["4", 0],
+      "ref_latent": ["12", 0],
+      "strength": 1.15,
+      "start_percent": 0.0,
+      "end_percent": 1.0,
+      "cond_only": true,
+      "fit_mode": "pad",
+      "ref_timestep": 0.0
+    }
+  },
+  "20": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "masterpiece, best quality, score_9, score_8_up, highres, safe, 1girl, solo, same character as the reference image, silver-white very long flowing hair with pale blue undertones, sparse champagne-gold fringe streak, bright blue eyes, ornate black white and gold celestial outfit with off-shoulder sleeves and layered ribbons, dark thigh-high stockings, luminous blue feather wing ornaments, large intricate golden astrolabe star halo behind her, adult anime woman, elegant confident gentle expression, standing full body character illustration, centered, clean deep navy background",
+      "clip": ["2", 0]
+    }
+  },
+  "21": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "worst quality, low quality, blurry, jpeg artifacts, bad anatomy, malformed hands, extra fingers, missing fingers, extra limbs, child, loli, chibi, different character, short hair, brown hair, text, logo, watermark, signature",
+      "clip": ["2", 0]
+    }
+  },
+  "22": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1536,
+      "batch_size": 1
+    }
+  },
+  "23": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 2026102102,
+      "steps": 30,
+      "cfg": 4.0,
+      "sampler_name": "er_sde",
+      "scheduler": "simple",
+      "denoise": 1.0,
+      "model": ["15", 0],
+      "positive": ["20", 0],
+      "negative": ["21", 0],
+      "latent_image": ["22", 0]
+    }
+  },
+  "24": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["23", 0],
+      "vae": ["3", 0]
+    }
+  },
+  "25": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["24", 0],
+      "filename_prefix": "larkie_incontext"
+    }
+  }
+}

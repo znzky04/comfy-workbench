@@ -1,0 +1,53 @@
+# Local Python environment and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+pip-*/
+pytest-of-*/
+_backup/
+.coverage
+htmlcov/
+
+# Machine-local configuration and secrets
+config.local.toml
+.env
+.env.*
+!.env.example
+
+# Runtime data and logs
+runs/
+logs/
+*.log
+inbox/processing/
+inbox/done/
+inbox/failed/
+inbox/*.json
+inbox/*.error.json
+
+# Generated images remain on disk but never enter Git
+output/
+kurumi/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+
+# Local release binaries and public exports
+integrations/dsh/releases/*.zip
+showcase-export/
+
+# Models and large binary weights
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
+
+# Editors and OS
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store

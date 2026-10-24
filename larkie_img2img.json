@@ -1,0 +1,119 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "anima-base-v1.0.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_3_06b_base.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    }
+  },
+  "10": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "lora_name": "anima-base-1-masterpiece-v51.safetensors",
+      "strength_model": 1.0,
+      "strength_clip": 1.0,
+      "model": ["1", 0],
+      "clip": ["2", 0]
+    }
+  },
+  "11": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "lora_name": "anima_context_detailer_base10.safetensors",
+      "strength_model": 0.75,
+      "strength_clip": 0.75,
+      "model": ["10", 0],
+      "clip": ["10", 1]
+    }
+  },
+  "12": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "lora_name": "anima-highres-aesthetic-boost.safetensors",
+      "strength_model": 0.5,
+      "strength_clip": 0.5,
+      "model": ["11", 0],
+      "clip": ["11", 1]
+    }
+  },
+  "20": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "masterpiece, best quality, score_9, score_8_up, highres, 1girl, solo, same character as the source image, silver-white very long hair with pale blue undertones, sparse champagne-gold fringe streak, bright blue eyes, ornate black white and gold celestial outfit, blue feather wing ornaments, large golden astrolabe star halo behind her, elegant anime character key art, preserve character design and facial identity",
+      "clip": ["12", 1]
+    }
+  },
+  "21": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "worst quality, low quality, blurry, lowres, bad anatomy, malformed hands, extra fingers, missing fingers, extra limbs, child, loli, chibi, text, logo, watermark, signature",
+      "clip": ["12", 1]
+    }
+  },
+  "30": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "larkie_reference_key_art.webp"
+    }
+  },
+  "31": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": ["30", 0],
+      "upscale_method": "lanczos",
+      "width": 1024,
+      "height": 1168,
+      "crop": "disabled"
+    }
+  },
+  "32": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": ["31", 0],
+      "vae": ["3", 0]
+    }
+  },
+  "40": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 2026102101,
+      "steps": 30,
+      "cfg": 5.0,
+      "sampler_name": "er_sde",
+      "scheduler": "beta57",
+      "denoise": 0.38,
+      "model": ["12", 0],
+      "positive": ["20", 0],
+      "negative": ["21", 0],
+      "latent_image": ["32", 0]
+    }
+  },
+  "50": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["40", 0],
+      "vae": ["3", 0]
+    }
+  },
+  "60": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["50", 0],
+      "filename_prefix": "larkie_img2img"
+    }
+  }
+}

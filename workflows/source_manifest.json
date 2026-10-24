@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_root": "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI/user/default/workflows",
+  "policy": "read-only; never modify, move, rename, or delete source workflows",
+  "captured_at": "2026-10-24",
+  "workflows": [
+    {"filename": "画师.json", "sha256": "40697b5a0f79813357913b69e2a2f940b55f2e442c2aa8440153508d31e9c470", "purpose": "artist/style workflow", "node_count": 44, "api_workflow_id": null},
+    {"filename": "随机抽奖.json", "sha256": "be86d24851a0a5061c906d7709401edff1640a4f4ecd792e97d3b23c846f5c6b", "purpose": "randomized generation", "node_count": 36, "api_workflow_id": null},
+    {"filename": "图生图尝试.json", "sha256": "bac64d99e25c4e812b243ee45d645bb8c2917546ef2d2fc6585fbf1ff09325e9", "purpose": "image-to-image experiment", "node_count": 16, "api_workflow_id": "larkie.incontext.v1"},
+    {"filename": "真图生图.json", "sha256": "24355b535ab6dabb0d0009f82d7d799b94d32e00619963dba802204a38a28de8", "purpose": "image-to-image", "node_count": 42, "api_workflow_id": "larkie.img2img.v1"},
+    {"filename": "主Anima (选择器).json", "sha256": "17371ec0810adf76c673af40a06eb557e93ac22bb64409be29d6134dce9a9e88", "purpose": "legacy Anima selector", "node_count": 40, "api_workflow_id": null},
+    {"filename": "主Anima_Profile_阳光辣妹校园_v1.json", "sha256": "2d816a346414cd5556a05adf0c9deacdbc08dbed30c60e98a9e182be1fba5975", "purpose": "legacy Anima profile", "node_count": 40, "api_workflow_id": null},
+    {"filename": "主Anima.json", "sha256": "ee21621539c43a146941687e47c10a2d65746d975e2e3297827b6b656c211484", "purpose": "legacy main Anima", "node_count": 39, "api_workflow_id": "legacy.main-anima.v1"},
+    {"filename": "anima_official_base_v1.json", "sha256": "06ba817d64e4ec5f4843b3d7ccdd61f476d300822538542abc93f27c8054cf76", "purpose": "official Anima base", "node_count": 12, "api_workflow_id": "anima.standard.v1"},
+    {"filename": "Anima+AIO+生图+超分.json", "sha256": "6ddde72d5574679a382732743ab308ed408a875f5705e332cbf42f87d1e93a4c", "purpose": "Anima generation and upscale", "node_count": 31, "api_workflow_id": "anima.hq-2x.v1"},
+    {"filename": "Anima+ToriiGate-0.5无审查反推图生图.json", "sha256": "9d69a4d5a4aa6b058c27cc0873b985fb7a40db5310d9074cc62d17f7eb8d1a3d", "purpose": "legacy reverse-prompt img2img", "node_count": 14, "api_workflow_id": null},
+    {"filename": "sunny_gyaru_baseline_v01.json", "sha256": "451f3497dabd64b126d72e255fccccee3cab198ddd1e2b5212712b74cd895207", "purpose": "baseline profile", "node_count": 11, "api_workflow_id": null},
+    {"filename": "wd14_reference_analysis.json", "sha256": "506e683792b7961bcf728a3fab09a98469e142ed0e8c215fdd3258145f902dc5", "purpose": "reference tag analysis", "node_count": 2, "api_workflow_id": null}
+  ]
+}
