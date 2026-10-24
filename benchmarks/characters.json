@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {"id": "larkie-img2img", "category": "larkie", "character": "拉琪", "workflow_id": "larkie.img2img.v1", "requires_reference": true},
+    {"id": "larkie-incontext", "category": "larkie", "character": "拉琪", "workflow_id": "larkie.incontext.v1", "requires_reference": true},
+    {"id": "kurumi-tokisaki", "category": "fan-character", "character": "时崎狂三", "workflow_id": "anima.standard.v1", "requires_reference": false},
+    {"id": "frieren", "category": "fan-character", "character": "芙莉莲", "workflow_id": "animagine.standard.v1", "requires_reference": false},
+    {"id": "marin-kitagawa", "category": "fan-character", "character": "喜多川海梦", "workflow_id": "anima.hq-2x.v1", "requires_reference": false},
+    {"id": "steampunk-engineer", "category": "original", "character": "赤铜短发机械义肢蒸汽朋克工匠", "workflow_id": "anima.standard.v1", "requires_reference": false},
+    {"id": "cyber-night-swordswoman", "category": "original", "character": "墨蓝长发赛博夜行剑士", "workflow_id": "animagine.standard.v1", "requires_reference": false},
+    {"id": "ocean-astrology-priest", "category": "original", "character": "青绿色波浪长发海洋星象祭司", "workflow_id": "anima.hq-2x.v1", "requires_reference": false}
+  ],
+  "public_fan_character_notice": "Fan Character Benchmark / 非商业同人技术评测。角色及原作权利归各自权利人所有；图片为本地生成模型的 AI 技术测试结果，与原作者、动画制作方及版权方无隶属或背书关系。"
+}
