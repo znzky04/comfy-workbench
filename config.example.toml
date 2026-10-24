@@ -1,0 +1,22 @@
+[comfyui]
+url = "http://127.0.0.1:8188"
+lifecycle = "external"
+connect_timeout_seconds = 5
+job_timeout_seconds = 900
+
+[paths]
+workspace = "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI"
+workflow_root = "workflows/api"
+manifest_root = "runs"
+canonical_output_root = "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI/output/comfyui-demo"
+
+[retention]
+delete_generated_images = false
+log_max_mb = 5
+log_backup_count = 5
+disk_warning_free_gb = 50
+
+[web]
+host = "127.0.0.1"
+port = 8199
+upload_max_mb = 25

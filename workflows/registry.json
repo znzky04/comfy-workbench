@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "workflows": [
+    {
+      "workflow_id": "anima.standard.v1",
+      "version": "1.0.0",
+      "title": "Anima Standard",
+      "mode": "txt2img",
+      "api_path": "workflows/api/anima.standard.v1.json",
+      "sha256": "fb5972faad8b8e3751ec7f5c1c55ae318ae438c209129afbd78735f3a1c0686d",
+      "source_canvas": "anima_official_base_v1.json",
+      "parameters": {
+        "prompt": {"node_id": "20", "input": "text", "type": "string", "required": true},
+        "negative_prompt": {"node_id": "21", "input": "text", "type": "string"},
+        "seed": {"node_id": "40", "input": "seed", "type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+        "width": {"node_id": "30", "input": "width", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "height": {"node_id": "30", "input": "height", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "steps": {"node_id": "40", "input": "steps", "type": "integer", "minimum": 1, "maximum": 100},
+        "cfg": {"node_id": "40", "input": "cfg", "type": "number", "minimum": 0, "maximum": 30}
+      },
+      "requirements": {
+        "models": ["anima-base-v1.0.safetensors", "qwen_3_06b_base.safetensors", "qwen_image_vae.safetensors"],
+        "loras": ["anima-base-1-masterpiece-v51.safetensors", "anima_context_detailer_base10.safetensors", "anima-highres-aesthetic-boost.safetensors"],
+        "upscalers": [],
+        "custom_nodes": []
+      },
+      "output_nodes": ["60"],
+      "save_node": "60",
+      "dsh": {"tags": ["anima", "txt2img", "standard"], "skill_path": "integrations/dsh/skills/anima-standard.md", "require_skill": false}
+    },
+    {
+      "workflow_id": "anima.hq-2x.v1",
+      "version": "1.0.0",
+      "title": "Anima HQ 2x",
+      "mode": "upscale",
+      "api_path": "workflows/api/anima.hq-2x.v1.json",
+      "sha256": "f89ff27c89a2f0cec1fa84d6487e96e1fe021c89231a53166e274f4133d9977d",
+      "source_canvas": "Anima+AIO+生图+超分.json",
+      "parameters": {
+        "prompt": {"node_id": "20", "input": "text", "type": "string", "required": true},
+        "negative_prompt": {"node_id": "21", "input": "text", "type": "string"},
+        "seed": {"node_id": "40", "input": "seed", "type": "integer", "minimum": 0, "maximum": 18446744073709551615, "mirrors": [{"node_id": "80", "input": "seed"}]},
+        "width": {"node_id": "30", "input": "width", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "height": {"node_id": "30", "input": "height", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "steps": {"node_id": "40", "input": "steps", "type": "integer", "minimum": 1, "maximum": 100, "mirrors": [{"node_id": "80", "input": "steps"}]},
+        "cfg": {"node_id": "40", "input": "cfg", "type": "number", "minimum": 0, "maximum": 30, "mirrors": [{"node_id": "80", "input": "cfg"}]}
+      },
+      "requirements": {
+        "models": ["anima-base-v1.0.safetensors", "qwen_3_06b_base.safetensors", "qwen_image_vae.safetensors"],
+        "loras": ["anima-base-1-masterpiece-v51.safetensors", "anima_context_detailer_base10.safetensors", "anima-highres-aesthetic-boost.safetensors"],
+        "upscalers": ["realesrganX4plusAnime_v1.pt"],
+        "custom_nodes": ["UltimateSDUpscale"]
+      },
+      "output_nodes": ["60"],
+      "save_node": "60",
+      "dsh": {"tags": ["anima", "upscale", "hq", "2x"], "skill_path": "integrations/dsh/skills/anima-hq-2x.md", "require_skill": true}
+    },
+    {
+      "workflow_id": "animagine.standard.v1",
+      "version": "1.0.0",
+      "title": "Animagine Standard",
+      "mode": "txt2img",
+      "api_path": "workflows/api/animagine.standard.v1.json",
+      "sha256": "6862b6cba993d83053ffe67f8de4a7428bb3210d62a0baad7ff4310a7f4365ad",
+      "source_canvas": null,
+      "parameters": {
+        "prompt": {"node_id": "2", "input": "text", "type": "string", "required": true},
+        "negative_prompt": {"node_id": "3", "input": "text", "type": "string"},
+        "seed": {"node_id": "5", "input": "seed", "type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+        "width": {"node_id": "4", "input": "width", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "height": {"node_id": "4", "input": "height", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "steps": {"node_id": "5", "input": "steps", "type": "integer", "minimum": 1, "maximum": 100},
+        "cfg": {"node_id": "5", "input": "cfg", "type": "number", "minimum": 0, "maximum": 30}
+      },
+      "requirements": {
+        "models": ["animagine-xl-4.0-opt.safetensors"],
+        "loras": [],
+        "upscalers": [],
+        "custom_nodes": []
+      },
+      "output_nodes": ["7"],
+      "save_node": "7",
+      "dsh": {"tags": ["animagine", "txt2img", "standard"], "skill_path": "integrations/dsh/skills/animagine-standard.md", "require_skill": false}
+    },
+    {
+      "workflow_id": "larkie.img2img.v1",
+      "version": "1.0.0",
+      "title": "Larkie Identity Img2Img",
+      "mode": "img2img",
+      "api_path": "workflows/api/larkie.img2img.v1.json",
+      "sha256": "ab2ad8093fcf457476cd19b63d0dfa98b2265d91fcacb8fa805e1f96ddbe0aba",
+      "source_canvas": "真图生图.json",
+      "parameters": {
+        "prompt": {"node_id": "20", "input": "text", "type": "string", "required": true},
+        "negative_prompt": {"node_id": "21", "input": "text", "type": "string"},
+        "seed": {"node_id": "40", "input": "seed", "type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+        "width": {"node_id": "31", "input": "width", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "height": {"node_id": "31", "input": "height", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8},
+        "steps": {"node_id": "40", "input": "steps", "type": "integer", "minimum": 1, "maximum": 100},
+        "cfg": {"node_id": "40", "input": "cfg", "type": "number", "minimum": 0, "maximum": 30},
+        "denoise": {"node_id": "40", "input": "denoise", "type": "number", "minimum": 0, "maximum": 1},
+        "input_image": {"node_id": "30", "input": "image", "type": "image", "required": true}
+      },
+      "requirements": {
+        "models": ["anima-base-v1.0.safetensors", "qwen_3_06b_base.safetensors", "qwen_image_vae.safetensors"],
+        "loras": ["anima-base-1-masterpiece-v51.safetensors", "anima_context_detailer_base10.safetensors", "anima-highres-aesthetic-boost.safetensors"],
+        "upscalers": [],
+        "custom_nodes": []
+      },
+      "output_nodes": ["60"],
+      "save_node": "60",
+      "dsh": {"tags": ["larkie", "img2img", "identity"], "skill_path": "integrations/dsh/skills/larkie-img2img.md", "require_skill": true}
+    },
+    {
+      "workflow_id": "larkie.incontext.v1",
+      "version": "1.0.0",
+      "title": "Larkie Identity In-Context",
+      "mode": "incontext",
+      "api_path": "workflows/api/larkie.incontext.v1.json",
+      "sha256": "5b31551eee96459bbe6f43848da6653da3021c0c530ca538047e84af05fc9ec2",
+      "source_canvas": "图生图尝试.json",
+      "parameters": {
+        "prompt": {"node_id": "20", "input": "text", "type": "string", "required": true},
+        "negative_prompt": {"node_id": "21", "input": "text", "type": "string"},
+        "seed": {"node_id": "23", "input": "seed", "type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+        "width": {"node_id": "22", "input": "width", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8, "mirrors": [{"node_id": "12", "input": "target_width"}]},
+        "height": {"node_id": "22", "input": "height", "type": "integer", "minimum": 256, "maximum": 2048, "multiple_of": 8, "mirrors": [{"node_id": "12", "input": "target_height"}]},
+        "steps": {"node_id": "23", "input": "steps", "type": "integer", "minimum": 1, "maximum": 100},
+        "cfg": {"node_id": "23", "input": "cfg", "type": "number", "minimum": 0, "maximum": 30},
+        "denoise": {"node_id": "23", "input": "denoise", "type": "number", "minimum": 0, "maximum": 1},
+        "input_image": {"node_id": "10", "input": "image", "type": "image", "required": true}
+      },
+      "requirements": {
+        "models": ["anima-base-v1.0.safetensors", "qwen_3_06b_base.safetensors", "qwen_image_vae.safetensors"],
+        "loras": ["anima-incontext-character.safetensors"],
+        "upscalers": [],
+        "custom_nodes": ["AnimaRefEncode", "AnimaInContextApply"]
+      },
+      "output_nodes": ["25"],
+      "save_node": "25",
+      "dsh": {"tags": ["larkie", "incontext", "identity"], "skill_path": "integrations/dsh/skills/larkie-incontext.md", "require_skill": true}
+    }
+  ]
+}
