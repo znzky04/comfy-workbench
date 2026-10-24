@@ -4,6 +4,18 @@
 
 用户自行打开 ComfyUI Desktop，确认地址为 `http://127.0.0.1:8188`。Codex 不启动、强杀或更新 ComfyUI，也不在未确认时下载模型、安装节点或调用付费 API。
 
+官方 comfy-mcp 使用的 comfy-cli 默认工作区必须是：
+
+```text
+E:\AI\ComfyUI-Workspace\ComfyUI\ComfyUI
+```
+
+只读核对使用 `comfy --json which`。若配置漂移，可在不启动服务的情况下运行：
+
+```powershell
+comfy --skip-prompt set-default "E:\AI\ComfyUI-Workspace\ComfyUI\ComfyUI"
+```
+
 ## 官方 comfy-mcp 固定流程
 
 1. `server_info`：确认服务可连接及版本。

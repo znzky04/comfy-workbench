@@ -20,10 +20,12 @@
 ## 外部集成
 
 - Codex 已配置官方 `comfy-mcp` 精简工具白名单，目标为 `127.0.0.1:8188`。
+- 2026-10-25 复核发现 comfy-cli 默认工作区曾漂移到 C 盘默认目录；已通过官方 `set-default` 纠正为 `E:\AI\ComfyUI-Workspace\ComfyUI\ComfyUI`，`server_info` 已确认新路径。
 - DSH 安装 `dsh-comfyui 0.5.5`，支持预设 ZIP v1、参数和技能包。
 - DSH 预设导入永远创建新记录，不覆盖旧工作流。
 - ComfyUI 当前环境曾记录为 0.42.3、Python 3.13.12、RTX 5070 Ti Laptop 12GB。
 - 当前 8188 未监听；doctor 能在约 1.4 秒内返回“请手动打开 Desktop”，且未启动任何进程。
+- comfy-mcp 的 freshness 检查曾在 15 秒超时，但不影响工作区识别；待 Desktop 启动后重新验证服务、版本和依赖。
 
 ## 网站
 
