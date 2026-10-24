@@ -1,6 +1,25 @@
+import hashlib
 import json
 from collections import Counter
 from pathlib import Path
+
+from comfyui_agent_studio.models import GenerationRequest
+
+REQUEST_FIELDS = {
+    "workflow_id",
+    "prompt",
+    "negative_prompt",
+    "seed",
+    "count",
+    "width",
+    "height",
+    "steps",
+    "cfg",
+    "denoise",
+    "input_images",
+    "output_label",
+    "client",
+}
 
 
 def test_character_benchmark_is_exactly_two_three_three() -> None:
@@ -20,3 +39,18 @@ def test_character_benchmark_is_exactly_two_three_three() -> None:
         "larkie.incontext.v1",
     }
     assert "非商业同人技术评测" in data["public_fan_character_notice"]
+
+
+def test_all_benchmark_requests_match_generation_contract() -> None:
+    data = json.loads(Path("benchmarks/characters.json").read_text(encoding="utf-8"))
+    defaults = data["defaults"]
+    for task in data["tasks"]:
+        payload = {**defaults, **task, "client": task["assigned_client"]}
+        request = GenerationRequest.model_validate(
+            {key: value for key, value in payload.items() if key in REQUEST_FIELDS}
+        )
+        assert request.workflow_id == task["workflow_id"]
+        for image in request.input_images:
+            assert image.is_file()
+            digest = hashlib.sha256(image.read_bytes()).hexdigest()
+            assert digest == task["reference_sha256"]

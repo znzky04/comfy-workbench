@@ -18,5 +18,8 @@
 - 完成 DSH preset v1 构建/验证、旧“主Anima”备份、5 个技能包和 Codex runbook。
 - 修复本地 HTTP 代理导致的 502/慢失败，Desktop 关闭时 doctor 约 1.4 秒返回且不启动进程。
 - 自动验证：pytest 17 passed，ruff 通过，5/5 工作流静态校验通过。
-- M0 等待 Git 分阶段初始化提交；M1–M4 离线部分通过。
+- Git 已初始化，并按 M0、M1、M2、M3、M4 建立 5 个独立提交。
+- M0 已完成；M1–M4 离线部分通过。
+- 已找到拉琪参考图并核对 SHA-256，补齐 8 个固定请求、参数、客户端分工和 M5 runbook。
+- 已实际执行“ComfyUI 未启动”提交测试：命令返回 1，任务 manifest 进入 `failed`，保留 `seed=0`、工作流哈希和错误详情，且没有启动进程或生成/删除图片。
 - M5 受外部状态阻塞：需要用户手动启动 ComfyUI Desktop；M5 通过前保持 M6/M7 门禁。

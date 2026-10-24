@@ -17,7 +17,7 @@
 
 | 阶段 | 状态 | 完成条件 |
 |---|---|---|
-| M0 文档、基线、回滚 | in_progress | 方案文档、哈希、DSH 备份、Git、磁盘记录完成 |
+| M0 文档、基线、回滚 | complete | 方案、哈希、DSH 备份、Git 与磁盘记录已完成 |
 | M1 统一核心与生命周期 | offline_passed | 核心、doctor 和无自动启停已验；在线环境检查待 Desktop |
 | M2 工作流注册与运行记录 | offline_passed | 5 条注册、12 条登记、schema 和 manifest 已验 |
 | M3 CLI、热文件夹、兼容包装 | offline_passed | 新 CLI、热文件失败留证和兼容包装已验 |
