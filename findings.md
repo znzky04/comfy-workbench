@@ -1,5 +1,13 @@
 # Findings
 
+## M6 本地网页验收
+
+- 用户将本轮交付收敛为本地工作台，M7 等待人工选图。
+- 真实 Shared input 目录拒绝网页进程直接写入。ComfyUI 的 /upload/image 接口正常，因此 Web 只把校验后的字节交给实例自身保存，不改系统权限。
+- 新版 FastAPI/Starlette 会把 multipart 接收阶段的 HTTPException 转成 400；上传限流中间件按累计字节重新返回 413，chunked 测试覆盖此路径。
+- 默认 C 盘浏览器临时目录曾被拒绝；测试脚本现自动把 TEMP/TMP 定向项目 E 盘，复用本机 Chrome，无需另下载 Chromium。
+- 已通过 30 项自动测试和真实 Web 双图生成（seed=0/1）；桌面/移动 UI、筛选、详情、真实参考图上传、SSE 和零 JS 错误均验证。测试框架存在一条 TestClient 弃用警告，不影响当前结果。
+
 ## Codex 再接手（2026-10-25）
 
 - 已只读解压并核对 DSH 会话 `session-c184de8b-6602-4d29-a8c7-e685336db7a1`；末轮确认为用户选择保持第一层补丁、交回 Codex，提交为 `b3daf0b`。

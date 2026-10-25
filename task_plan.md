@@ -23,8 +23,8 @@
 | M3 CLI、热文件夹、兼容包装 | offline_passed | 新 CLI、热文件失败留证和兼容包装已验 |
 | M4 DSH/Codex 集成 | offline_passed | DSH ZIP/技能包/runbook 已验；UI 导入待 M5 |
 | M5 真实生图验收 | complete | 8/8 有输出和评分，5/5 真实成功；视觉不足保留。DSH v0.1.2 参数契约通过，UI 重导入列为使用限制 |
-| M6 本地网页 | in_progress | FastAPI 工作台、SSE、上传、历史、视觉和浏览器测试 |
-| M7 个人网站项目页 | pending | 精选导出、项目页、网站构建与回归测试 |
+| M6 本地网页 | complete | FastAPI 工作台、上传/SSE/取消/历史/画廊完成；30 项测试和桌面/手机 Playwright 通过，真实双图成功 |
+| M7 个人网站项目页 | deferred_by_user | 用户明确选择公开图片稍后选；批准清单仍为空，网站与公开导出不实施 |
 
 ## 当前约束
 
@@ -54,4 +54,6 @@
 | 重启后 ComfyUI 为 0.42.5 而非交接时的 0.42.3 | 1 | 记录环境漂移；核对 `attention.py` 字节一致，排除为本次失败原因 |
 | 容器兼容测试在旧节点复现 `.shape` 故障 | 1 | 定向修复 peek/take 生命周期，6 项 CPU 测试通过 |
 | 容器解包初版误将 Tensor.take 当无参容器方法 | 1 | 先用 isinstance(torch.Tensor) 保留普通 Tensor 路径，回归测试通过 |
+| Web 浏览器测试初次使用 C 盘临时目录被拒绝 | 1 | TEMP/TMP 定向 E 盘 runs/browser-temp，复用现有 Chrome 无头测试 |
+| Web 进程直接写 Shared input 被 Windows 拒绝 | 1 | 改由 ComfyUI HTTP 上传接口写入，保持实例目录权限与原图保留策略 |
 

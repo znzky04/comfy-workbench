@@ -1,6 +1,6 @@
 # ComfyUI Agent Studio
 
-一个本地优先、可追溯的 ComfyUI 多入口控制工程。Codex、DSH、CLI、热文件夹和后续本地网页共享同一份版本化注册表、参数校验、任务状态与输出规则。
+一个本地优先、可追溯的 ComfyUI 多入口控制工程。Codex、DSH、CLI、热文件夹和星夜网页工作台共享同一份版本化注册表、参数校验、任务状态与输出规则。
 
 ## 最重要的边界
 
@@ -20,7 +20,7 @@ py -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
 ```
 
-Web 依赖将在 M5 的真实生成门禁通过后单独安装：
+本地网页依赖单独安装，项目当前环境已安装：
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -e ".[web,dev]"
@@ -40,11 +40,14 @@ comfy-demo job show <job-id>
 comfy-demo job wait <job-id>
 comfy-demo job cancel <job-id>
 comfy-demo watch
+comfy-demo studio
 comfy-demo dsh bundle
-comfy-demo dsh verify integrations\dsh\releases\comfyui-demo-dsh-presets-v0.1.0.zip
+comfy-demo dsh verify integrations\dsh\releases\comfyui-demo-dsh-presets-v0.1.2.zip
 ```
 
-`studio` 和 `showcase export` 在 M5/M6 门禁通过前会明确拒绝，不会偷偷启用未验证实现。
+运行 `comfy-demo studio` 后打开 `http://127.0.0.1:8199`。旧的 `启动画图台.bat` 同样可用。上传、SSE 状态、取消、历史、角色分类和原图详情均使用统一核心；工作台关闭后，ComfyUI 中的任务继续执行，下次启动会恢复状态观察。
+
+`showcase export` 仍保持锁定：本轮用户选择先完成本地工作台，公开图片名单稍后人工批准。个人网站尚未接入。
 
 ## 工作流
 
@@ -80,6 +83,7 @@ comfy-demo dsh verify integrations\dsh\releases\comfyui-demo-dsh-presets-v0.1.0.
 
 - DSH 当前交接入口：`docs/M5_DSH_HANDOFF.md`
 - M5 在线验收：`docs/M5_LIVE_ACCEPTANCE_RUNBOOK.md`
+- 本地工作台使用与验收：`docs/M6_LOCAL_STUDIO.md`
 
 - `ENGINEERING_UPGRADE_PLAN.md`：工程总方案。
 - `DSH_IMPLEMENTATION_PLAN.md`：DSH 阶段化执行清单。

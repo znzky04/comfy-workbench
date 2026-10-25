@@ -20,6 +20,7 @@ web = [
   "jinja2>=3.1,<4",
   "python-multipart>=0.0.20,<1",
   "uvicorn[standard]>=0.34,<1",
+  "pillow>=11,<13",
 ]
 dev = [
   "pytest>=8.3,<9",

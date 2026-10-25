@@ -39,7 +39,7 @@ class ComfyClient:
             response = self._http.request(method, path, **kwargs)
             response.raise_for_status()
             return response
-        except (httpx.ConnectError, httpx.ConnectTimeout) as exc:
+        except (httpx.NetworkError, httpx.TimeoutException) as exc:
             raise ComfyUnavailableError(
                 f"无法连接 {self.settings.comfyui.url}。请手动打开 ComfyUI Desktop 后重试；本项目不会代为启动。"
             ) from exc
@@ -90,6 +90,16 @@ class ComfyClient:
         name = data.get("name", path.name)
         subfolder = data.get("subfolder", "comfyui-demo")
         return f"{subfolder}/{name}" if subfolder else name
+
+    def upload_bytes(self, payload: bytes, filename: str, subfolder: str) -> str:
+        """Let the owning ComfyUI process write to its configured input directory."""
+        response = self._request(
+            "POST",
+            "/upload/image",
+            files={"image": (filename, payload, mimetypes.guess_type(filename)[0])},
+            data={"type": "input", "subfolder": subfolder, "overwrite": "false"},
+        ).json()
+        return f"{response.get('subfolder', subfolder)}/{response['name']}"
 
     def submit(self, workflow: dict[str, Any]) -> str:
         response = self._request(
@@ -148,9 +158,7 @@ class ComfyClient:
         return paths
 
     def installed_dependencies(self, names: list[str]) -> dict[str, bool]:
-        model_roots = self.settings.paths.model_roots or [
-            self.settings.paths.workspace / "models"
-        ]
+        model_roots = self.settings.paths.model_roots or [self.settings.paths.workspace / "models"]
         wanted = set(names)
         found: set[str] = set()
         for model_root in model_roots:

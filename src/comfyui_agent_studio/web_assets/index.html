@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="studio-token" content="{{ token }}">
+  <meta name="color-scheme" content="dark">
+  <title>星夜绘图室 · ComfyUI Agent Studio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23e6c986' d='M20 0l4 16 16 4-16 4-4 16-4-16L0 20l16-4z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/studio.css">
+  <script src="/static/studio.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#compose">跳到生图表单</a>
+  <div class="sky" aria-hidden="true"></div>
+  <aside class="rail" aria-label="工作台导航">
+    <a class="sigil" href="#" aria-label="星夜绘图室首页">✧</a>
+    <a class="rail-item active" href="#compose"><span>◈</span><small>创作</small></a>
+    <a class="rail-item" href="#archive"><span>▧</span><small>图库</small></a>
+    <a class="rail-item" href="#guide"><span>⌘</span><small>指南</small></a>
+    <div class="rail-end">LOCAL<br>ONLY</div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <a class="wordmark" href="#">LARKHESIA <span>/ 星夜绘图室</span></a>
+      <div class="connection" id="connection" role="status"><i></i><span>正在连接 ComfyUI</span></div>
+    </header>
+    <section class="intro">
+      <div><p class="eyebrow">COMFYUI AGENT STUDIO <span>—</span> OBSERVATORY 01</p>
+      <h1>把想象，绘成星光<span>。</span></h1>
+      <p class="intro-copy">从一句灵感，到一个属于你的世界。</p></div>
+      <div class="orbital" aria-hidden="true"><div></div><span>✦</span><small>IMAGINATION<br>IN ORBIT</small></div>
+    </section>
+    <section class="workbench" aria-label="创作工作区">
+      <form id="compose" class="compose panel">
+        <div class="section-title"><span class="index">01</span><h2>开启一次创作</h2><span class="corner-star">✧</span></div>
+        <label for="workflow">生成方式 <span class="field-note" id="workflow-mode">LOCAL DIFFUSION</span></label>
+        <select id="workflow" required><option value="">正在读取工作流…</option></select>
+        <p class="workflow-hint" id="workflow-hint">5 条经过实测的本地工作流</p>
+        <label for="prompt">你想画什么？ <span class="field-note">PROMPT</span></label>
+        <textarea id="prompt" rows="5" required placeholder="人物、服饰、场景、光线……让灵感从这里出发。"></textarea>
+        <div class="prompt-foot"><span>Animagine 建议使用英文标签；Anima 可描述完整场景。</span><button type="button" class="text-button" id="example">填入原创示例 ↗</button></div>
+        <div id="reference-box" hidden>
+          <label for="reference">角色参考图 <span class="required">必需</span></label>
+          <div class="upload-zone"><input id="reference" type="file" accept="image/png,image/jpeg,image/webp"><p id="reference-status">选择 PNG / JPG / WebP，最大 25 MB</p></div>
+        </div>
+        <div class="param-grid">
+          <div><label for="width">宽度</label><input id="width" type="number" min="256" max="2048" step="8" value="832"></div>
+          <div><label for="height">高度</label><input id="height" type="number" min="256" max="2048" step="8" value="1216"></div>
+          <div><label for="count">张数</label><select id="count"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+        </div>
+        <details class="advanced"><summary>精细调整 <span>种子 · 步数 · 引导强度</span></summary>
+          <div class="param-grid two"><div><label for="seed">Seed <span class="field-note">−1 为随机</span></label><input id="seed" type="text" inputmode="numeric" value="-1" pattern="-?\d+"></div><div><label for="steps">采样步数</label><input id="steps" type="number" min="1" max="100" value="28"></div>
+          <div><label for="cfg">CFG</label><input id="cfg" type="number" min="0" max="30" step="0.1" value="4.5"></div><div><label for="denoise">重绘强度</label><input id="denoise" type="number" min="0" max="1" step="0.05" value="1"></div></div>
+          <label for="negative">负面提示词</label><textarea id="negative" rows="2" placeholder="留空使用工作流默认值"></textarea>
+        </details>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <button type="submit" class="generate" id="generate"><span>✦</span> 开始生成 <span>↗</span></button>
+        <p class="retention">本地生成 · 原图始终保留 · 不自动超分</p>
+      </form>
+      <section class="preview panel" aria-label="最新画面">
+        <div class="preview-top"><span class="eyebrow">THE VIEWFINDER</span><span id="preview-type">本地作品</span></div>
+        <button type="button" id="preview-open" class="preview-art" aria-label="放大预览"><img id="preview-image" alt="等待选择作品" hidden><div class="empty-orbit" id="preview-empty">✧<small>你的下一幅世界<br>即将在这里诞生</small></div></button>
+        <div class="preview-bottom"><div><span class="eyebrow" id="preview-workflow">YOUR NEXT WORLD</span><h3 id="preview-title">灵感正在汇聚</h3></div><span class="preview-badge" id="preview-size">本地原图</span></div>
+      </section>
+    </section>
+    <section id="live-job" class="live-job panel" hidden aria-live="polite"><div class="live-spark">✦</div><div class="live-copy"><strong id="job-title">任务已提交</strong><p id="job-detail">等待 ComfyUI</p></div><button type="button" id="cancel-job" class="outline-button">取消任务</button></section>
+    <section id="archive" class="archive">
+      <div class="archive-header"><div><p class="eyebrow">CONSTELLATION ARCHIVE</p><h2>留住每一次想象<span id="history-count"></span></h2></div><button type="button" class="text-button" id="refresh">刷新记录 ↻</button></div>
+      <div class="filters" role="group" aria-label="筛选作品"><button type="button" class="selected" data-filter="all">全部记录</button><button type="button" data-filter="original">原创角色</button><button type="button" data-filter="larkie">拉琪</button><button type="button" data-filter="fan-character">同人评测</button><button type="button" data-filter="studio">工作台创作</button><button type="button" data-filter="failed">失败记录</button></div>
+      <div id="gallery" class="gallery" aria-live="polite"></div>
+      <p id="history-empty" class="history-empty" hidden>这里还没有记录。试着写下你的第一个灵感。</p>
+    </section>
+    <section id="guide" class="guide panel"><div><p class="eyebrow">ONE CORE · MANY WAYS TO CREATE</p><h2>灵感从哪里来，都汇聚在这里。</h2><p>Codex、DSH、命令行与热文件夹共享工作流和本地图库。请先手动打开 ComfyUI Desktop，再开始创作。</p></div><details><summary>查看 Agent 使用方法 ↗</summary><p>Codex：server_info → system_stats → validate_workflow → run_workflow(wait=false) → job。DSH：导入 v0.1.2 预设，阅读工作流技能，再传入唯一 output_prefix。命令行：comfy-demo doctor；comfy-demo run &lt;工作流ID&gt; --prompt "…"。</p><p>网页只连接现有 ComfyUI，关闭网页不会停止生成。超分请显式选择 2× 工作流。所有失败、未采用图片均保留；取消只停止任务。</p></details></section>
+    <footer><span>✧ LARKHESIA / COMFYUI AGENT STUDIO</span><span>想象无界，作品留在本地。</span></footer>
+  </main>
+  <dialog id="artifact-dialog"><div class="dialog-top"><strong id="dialog-title">作品详情</strong><button type="button" class="outline-button" id="close-dialog">关闭 ×</button></div><img id="dialog-image" alt="作品完整预览"><p id="dialog-note"></p><label for="dialog-path">原图保存位置</label><input id="dialog-path" readonly><details><summary>运行参数与 manifest</summary><pre id="dialog-manifest"></pre></details></dialog>
+</body>
+</html>

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import uuid
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .client import ComfyClient
@@ -83,6 +84,8 @@ class GenerationService:
             for prompt_id in manifest.prompt_ids:
                 history = client.wait(prompt_id)
                 outputs.extend(str(path) for path in client.output_paths(history))
+                manifest.output_files = list(dict.fromkeys(outputs))
+                self.store.save(manifest)
             manifest.output_files = list(dict.fromkeys(outputs))
             self.store.transition(manifest, JobStatus.COMPLETED)
             return manifest
@@ -97,8 +100,49 @@ class GenerationService:
 
     def cancel(self, job_id: str) -> JobManifest:
         manifest = self.store.load(job_id)
+        if manifest.status in {JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED}:
+            return manifest
         with ComfyClient(self.settings) as client:
             for prompt_id in manifest.prompt_ids:
                 client.cancel(prompt_id)
         self.store.transition(manifest, JobStatus.CANCELLED)
         return manifest
+
+    def refresh(self, job_id: str) -> JobManifest:
+        """Reconcile a persisted job with ComfyUI, including after a studio restart."""
+        manifest = self.store.load(job_id)
+        if manifest.status in {JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED}:
+            return manifest
+        if not manifest.prompt_ids:
+            return manifest
+        with ComfyClient(self.settings) as client:
+            histories = [client.history(prompt_id) for prompt_id in manifest.prompt_ids]
+            available = list(
+                dict.fromkeys(
+                    str(path)
+                    for history in histories
+                    if history
+                    for path in client.output_paths(history)
+                )
+            )
+            if available != manifest.output_files:
+                manifest.output_files = available
+                self.store.save(manifest)
+            for history in histories:
+                if history and history.get("status", {}).get("status_str") == "error":
+                    manifest.error_category = "ComfyExecutionError"
+                    manifest.error_detail = str(history.get("status", {}))
+                    return self.store.transition(manifest, JobStatus.FAILED, manifest.error_detail)
+            if all(history and history.get("status", {}).get("completed") for history in histories):
+                return self.store.transition(manifest, JobStatus.COMPLETED)
+            queue = client.queue()
+            running = {str(row[1]) for row in queue.get("queue_running", [])}
+            if any(prompt_id in running for prompt_id in manifest.prompt_ids):
+                self.store.transition(manifest, JobStatus.RUNNING)
+            if (
+                datetime.now(UTC) - manifest.created_at
+            ).total_seconds() > self.settings.comfyui.job_timeout_seconds:
+                manifest.error_category = "JobTimeout"
+                manifest.error_detail = "任务观察超时；ComfyUI 端可能仍在运行，请查看其队列。"
+                self.store.transition(manifest, JobStatus.FAILED, manifest.error_detail)
+            return manifest

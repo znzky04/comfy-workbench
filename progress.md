@@ -5,6 +5,12 @@
 - 用户查看最后一张 in-context 后要求继续；工程验收报告已区分技术成功和视觉不足，M6 开始。
 - DSH v0.1.2 暴露 output_prefix，官方插件参数处理函数验证 5/5 通过；不修改插件源码或私有数据库。新版 UI 重导入待 DSH 服务打开后执行。
 - Web 依赖已安装至项目 E 盘 .venv。浏览器测试包大文件下载超时一次；改为独立安装网页依赖并复用现有浏览器测试环境。
+- 完成 FastAPI/Jinja/原生 JS/CSS 星夜工作台：5 工作流、参数、参考图、实时任务、取消、历史、多图画廊与详情；只调用统一服务。
+- 浏览器首次上传发现 Shared input 的 Windows 写入权限限制，改由 ComfyUI 自身上传接口写入；multipart 临时文件定向 E 盘，支持完整请求与 chunked 上传大小限制。
+- 真实浏览器双图任务 `b8a55d3c-7528-4eab-a7c3-74d7e3db99c2` 成功：512×768、16 steps，seed 0/1，两个权威输出均存在、manifest client=studio，SSE 到达 completed。
+- 增加重启恢复、超时、取消幂等和部分图片结果保留；不重提交旧任务，不删除任何图片。
+- 最终 pytest 30 passed；Ruff 通过。Playwright 使用现有 Chrome headless，桌面/手机、筛选、详情、上传、CSRF、无横向溢出和零 JS 错误全部通过。最终截图 runs/browser-check/28143f5cb297。
+- 用户明确选择“先完成本地工作台，公开图片稍后选”：M7 暂缓，个人网站无修改，public-selection 为空，公开导出继续锁定。
 
 ## 2026-10-25（Codex 再接手）
 

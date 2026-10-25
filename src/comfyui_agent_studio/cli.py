@@ -161,9 +161,17 @@ def watch(once: bool = False, interval: float = 2) -> None:
 
 @app.command()
 def studio() -> None:
-    """M5 通过前保持锁定，避免网页形成第二套未验证实现。"""
-    typer.echo("本地网页受阶段门禁保护：完成 M5 的 8 个真实任务后才启用 M6。")
-    raise typer.Exit(2)
+    """打开只连接用户 Desktop 的本地工作台。"""
+    try:
+        import uvicorn
+
+        from .web import create_app
+    except ImportError as exc:
+        typer.echo('请先安装网页依赖：.venv\\Scripts\\python.exe -m pip install -e ".[web]"')
+        raise typer.Exit(1) from exc
+    settings = load_settings()
+    typer.echo(f"星夜绘图室：http://{settings.web.host}:{settings.web.port}（Ctrl+C 停止网页）")
+    uvicorn.run(create_app(settings), host=settings.web.host, port=settings.web.port, access_log=False)
 
 
 @dsh_app.command("bundle")
