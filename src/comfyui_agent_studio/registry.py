@@ -187,7 +187,11 @@ class WorkflowRegistry:
         if "filename_prefix" not in save_inputs:
             raise WorkflowValidationError(f"保存节点缺少 filename_prefix：{definition.save_node}")
         save_inputs["filename_prefix"] = prefix
-        return definition, workflow, {**values, "output_prefix": prefix, "index": index + 1}
+        resolved = {
+            name: workflow[binding.node_id]["inputs"][binding.input]
+            for name, binding in definition.parameters.items()
+        }
+        return definition, workflow, {**resolved, "output_prefix": prefix, "index": index + 1}
 
     @staticmethod
     def _apply(workflow: dict[str, Any], binding: ParameterBinding, value: Any) -> None:

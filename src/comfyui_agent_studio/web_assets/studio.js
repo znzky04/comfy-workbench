@@ -27,6 +27,13 @@ function openDetails(job, index=0){
   $("dialog-image").alt=nameFor(job);
   $("dialog-path").value=job.artifacts[index]?.path||"此任务没有生成图片；记录已保留。";
   $("dialog-note").textContent=job.error_detail||job.human_evaluation?.notes||"本地创作记录。未自动选入公开作品集。";
+  const actual=job.resolved_parameters.runs?.[index]??job.resolved_parameters.runs?.[0]??{};
+  $("dialog-prompt").value=actual.prompt??job.request.prompt??"";
+  const negative=actual.negative_prompt??job.request.negative_prompt;
+  $("dialog-negative").value=negative??"";
+  $("dialog-negative").placeholder=negative===undefined||negative===null?"此历史任务未单独记录负面词，使用当时工作流的默认值。":"本次负面提示词为空";
+  $("copy-negative").disabled=negative===undefined||negative===null;
+  $("copy-status").textContent="提示词随运行记录保存在本地。";
   $("dialog-manifest").textContent=JSON.stringify(job,null,2);
   $("artifact-dialog").showModal();
 }
@@ -102,6 +109,12 @@ document.querySelectorAll("[data-filter]").forEach(button=>button.onclick=()=>{s
 $("workflow").onchange=()=>changeWorkflow().catch(e=>{$("form-error").hidden=false;$("form-error").textContent=e.message;});
 $("preview-open").onclick=()=>{if(state.selected)openDetails(state.selected);};
 $("close-dialog").onclick=()=>{$("artifact-dialog").close();$("preview-open").focus({preventScroll:true});};
+async function copySavedPrompt(field){
+  try{await navigator.clipboard.writeText($(field).value);$("copy-status").textContent="已复制到剪贴板。";}
+  catch(error){$(field).focus();$(field).select();$("copy-status").textContent="未能自动复制，请按 Ctrl+C 复制已选中的提示词。";}
+}
+$("copy-prompt").onclick=()=>copySavedPrompt("dialog-prompt");
+$("copy-negative").onclick=()=>copySavedPrompt("dialog-negative");
 $("refresh").onclick=()=>Promise.all([refreshJobs(),health()]).catch(e=>{$("history-empty").hidden=false;$("history-empty").textContent=e.message;});
 async function init(){
   try{const [workflows,benchmarks]=await Promise.all([api("/api/workflows"),api("/api/benchmarks")]);state.workflows=workflows;state.benchmark=Object.fromEntries(benchmarks.tasks.map(t=>[t.id,t]));$("workflow").replaceChildren();for(const d of workflows){const option=element("option",null,d.title);option.value=d.workflow_id;$("workflow").append(option);}await changeWorkflow();await refreshJobs();await health();}

@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from comfyui_agent_studio.errors import WorkflowValidationError
+from comfyui_agent_studio.manifests import ManifestStore
 from comfyui_agent_studio.models import GenerationRequest
 from comfyui_agent_studio.registry import WorkflowRegistry, sha256_file
 
@@ -60,3 +61,30 @@ def test_source_canvas_manifest_matches_files() -> None:
         path = source_root / item["filename"]
         assert path.is_file()
         assert sha256_file(path) == item["sha256"]
+
+
+@pytest.mark.parametrize("negative", [None, "", "模糊, watermark\n多余手指"])
+def test_prompt_history_preserves_effective_defaults_and_overrides(tmp_path, negative) -> None:
+    from comfyui_agent_studio.config import load_settings
+    from comfyui_agent_studio.service import GenerationService
+
+    settings = load_settings()
+    settings.paths.manifest_root = tmp_path
+    service = GenerationService(settings)
+    request = GenerationRequest(
+        workflow_id="anima.standard.v1",
+        prompt="小云雀来海\nmoonlit street",
+        negative_prompt=negative,
+    )
+    manifest = service.create_manifest(request)
+    definition, graph, resolved = service.registry.prepare(request, manifest.job_id, 0)
+    binding = definition.parameters["negative_prompt"]
+    assert resolved["negative_prompt"] == graph[binding.node_id]["inputs"][binding.input]
+    if negative is not None:
+        assert resolved["negative_prompt"] == negative
+    manifest.resolved_parameters = {"runs": [resolved]}
+    service.store.save(manifest)
+    loaded = ManifestStore(tmp_path).load(manifest.job_id)
+    assert loaded.request["prompt"] == request.prompt
+    assert loaded.resolved_parameters["runs"][0]["prompt"] == request.prompt
+    assert loaded.resolved_parameters["runs"][0]["negative_prompt"] == resolved["negative_prompt"]

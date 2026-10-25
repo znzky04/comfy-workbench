@@ -74,6 +74,16 @@
     <section id="guide" class="guide panel"><div><p class="eyebrow">ONE CORE · MANY WAYS TO CREATE</p><h2>灵感从哪里来，都汇聚在这里。</h2><p>Codex、DSH、命令行与热文件夹共享工作流和本地图库。请先手动打开 ComfyUI Desktop，再开始创作。</p></div><details><summary>查看 Agent 使用方法 ↗</summary><p>Codex：server_info → system_stats → validate_workflow → run_workflow(wait=false) → job。DSH：导入 v0.1.2 预设，阅读工作流技能，再传入唯一 output_prefix。命令行：comfy-demo doctor；comfy-demo run &lt;工作流ID&gt; --prompt "…"。</p><p>网页只连接现有 ComfyUI，关闭网页不会停止生成。超分请显式选择 2× 工作流。所有失败、未采用图片均保留；取消只停止任务。</p></details></section>
     <footer><span>✧ LARKHESIA / COMFYUI AGENT STUDIO</span><span>想象无界，作品留在本地。</span></footer>
   </main>
-  <dialog id="artifact-dialog"><div class="dialog-top"><strong id="dialog-title">作品详情</strong><button type="button" class="outline-button" id="close-dialog">关闭 ×</button></div><img id="dialog-image" alt="作品完整预览"><p id="dialog-note"></p><label for="dialog-path">原图保存位置</label><input id="dialog-path" readonly><details><summary>运行参数与 manifest</summary><pre id="dialog-manifest"></pre></details></dialog>
+  <dialog id="artifact-dialog">
+    <div class="dialog-top"><strong id="dialog-title">作品详情</strong><button type="button" class="outline-button" id="close-dialog">关闭 ×</button></div>
+    <img id="dialog-image" alt="作品完整预览"><p id="dialog-note"></p>
+    <div class="saved-prompt-heading"><label for="dialog-prompt">本次正向提示词</label><button type="button" class="text-button" id="copy-prompt">复制正向提示词</button></div>
+    <textarea id="dialog-prompt" rows="4" readonly></textarea>
+    <div class="saved-prompt-heading"><label for="dialog-negative">本次负面提示词</label><button type="button" class="text-button" id="copy-negative">复制负面提示词</button></div>
+    <textarea id="dialog-negative" rows="3" readonly></textarea>
+    <p id="copy-status" role="status" aria-live="polite"></p>
+    <label for="dialog-path">原图保存位置</label><input id="dialog-path" readonly>
+    <details><summary>运行参数与 manifest</summary><pre id="dialog-manifest"></pre></details>
+  </dialog>
 </body>
 </html>
