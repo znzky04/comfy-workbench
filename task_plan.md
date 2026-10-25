@@ -22,7 +22,7 @@
 | M2 工作流注册与运行记录 | offline_passed | 5 条注册、12 条登记、schema 和 manifest 已验 |
 | M3 CLI、热文件夹、兼容包装 | offline_passed | 新 CLI、热文件失败留证和兼容包装已验 |
 | M4 DSH/Codex 集成 | offline_passed | DSH ZIP/技能包/runbook 已验；UI 导入待 M5 |
-| M5 真实生图验收 | in_progress | 7 个正式任务完成；容器修复及 6 项离线专项测试已通过，待用户启动 Desktop 后由 Codex 正式复跑 |
+| M5 真实生图验收 | in_progress | 8/8 正式任务有输出和评分、5/5 工作流真实成功；in-context 视觉不通过，DSH 统一输出前缀仍待补齐，尚未放行 M6 |
 | M6 本地网页 | pending | FastAPI 工作台、SSE、上传、历史、视觉和浏览器测试 |
 | M7 个人网站项目页 | pending | 精选导出、项目页、网站构建与回归测试 |
 

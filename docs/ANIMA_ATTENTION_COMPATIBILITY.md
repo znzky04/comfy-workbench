@@ -50,10 +50,19 @@ integrations/dsh/patches/comfyui-anima-incontext-comfyui-0.42.x-containers.diff
 
 需要回滚时，先由用户关闭 Desktop，再用上述本次备份恢复。恢复后是 DSH 交回的第一层补丁状态，in-context 仍不可用；原始未补丁文件另有 DSH 的 `incontext.py.bak-20261025-132743`。
 
-## 尚未通过的验收
+## 在线验证结果
 
-截至本次离线修复，ComfyUI Desktop 未启动。CPU 测试证明接口与数值分支兼容，不能代替真实 GPU 采样。
+用户手动启动 ComfyUI Desktop 0.42.5 后，官方 comfy-mcp 完成预检、异步提交、轮询和输出解析。正式任务完整运行 88.02 秒，接口修复已通过真实 GPU 验证。
 
-下一步由用户手动打开 Desktop，Codex 用官方 comfy-mcp 完成 `larkie-incontext` 正式任务并补录 manifest/评分。M5 保持进行中，M6/M7 尚未开始。
+```text
+job_id: ae92c6ea-f306-4ed7-ad96-38834ff1bd6f
+prompt_id: a031443e-c606-42dd-98b4-9b7cf9669b14
+manifest: runs/2026/10/ae92c6ea-f306-4ed7-ad96-38834ff1bd6f.json
+output: E:\Comfy-Desktop\ComfyUI-Shared\output\comfyui-demo\2026-10-25\larkie-incontext-v1\benchmark_larkie_incontext_ae92c6ea-f306-4ed7-ad96-38834ff1bd6f_240102_1_00001_.png
+```
+
+技术完成、视觉不通过：服装更暴露，参考服装与面部身份保持弱，环形星环变为星芒。Codex 视觉评分已写入 manifest，明确不代表用户批准，也不进入公开精选。
+
+8/8 正式任务现均有完成记录、实际输出和评分，覆盖 5/5 工作流；12 个原始画布工作流哈希不变。M5 保持进行中：视觉验收与下述 DSH 命名契约仍待解决；M6/M7 尚未开始。
 
 DSH 狂三已有成功结果，继续保留 `E:\Comfy-Desktop\ComfyUI-Shared\output\anima_00003_.png`。其通道仍使用内置 SaveImage 前缀，尚未满足统一 job 前缀契约；后续需通过受支持的参数/导入方式补齐，不能改写历史路径。

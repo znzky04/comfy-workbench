@@ -7,6 +7,8 @@
 - 先用本机 ComfyUI 的真实 `AttentionTensorContainer` 和 `wrap_attn` 定义重现容器失败，再修复节点：形状检查只 peek，回退保留原容器和参数，仅自定义 SDPA 分支 take。参考偏置计算保持不变。
 - 第一版容器解包发现 PyTorch Tensor 也有带索引的 take 方法；改为先识别原始 Tensor，避免旧接口回归。6 项 CPU 针对性测试通过，包含真实容器、普通 Tensor、禁用/中性/序列不匹配回退和核心 container_function override。
 - 运行中的服务没有被自动管理；已请求用户手动打开 Desktop，真实采样仍待启动后执行。
+- 后续真实 GPU 验证成功：用户打开 Desktop 后，原参数正式 in-context 任务完整执行 88.02 秒，两个接口故障均未复现。输出保留于 Shared/output/comfyui-demo/2026-10-25/larkie-incontext-v1。
+- 兼容修复解决了执行问题，没有解决模型的身份保持质量：这张图只保住月白发和蓝翼，服装、面部及金色环偏离参考和 brief。不得将技术成功写成视觉通过。
 
 ## 当前工程
 

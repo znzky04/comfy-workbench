@@ -8,6 +8,10 @@
 - 下一步：记录版本化补丁、复核项目测试，然后等待用户手动打开 Desktop，使用官方 comfy-mcp 运行正式拉琪 in-context。
 - 版本化容器补丁已保存，反向适用性检查通过；节点最终 SHA-256 为 `ee9b7f3c4d275779ff4717c5bee3024f6e8b6a2deb8d48c4d1a1b8351375e4e3`。
 - 最终离线验收：项目 pytest 19 passed，维护范围 Ruff 通过，5/5 注册工作流静态校验通过，注意力专项 6/6 通过。详细恢复/回滚记录见 `docs/ANIMA_ATTENTION_COMPATIBILITY.md`。
+- 用户手动打开 Desktop 后，官方 MCP 确认 ComfyUI 0.42.5 在线、约 10.77 GiB 空闲显存；正式 in-context 预检无错误/警告，异步提交并完成，ComfyUI 实际执行 88.02 秒。
+- 正式 job `ae92c6ea-f306-4ed7-ad96-38834ff1bd6f`，prompt `a031443e-c606-42dd-98b4-9b7cf9669b14`，seed 240102、832×1216、28 步、CFG 4.5；输出与评分已写入 manifest。
+- 图片技术成功但视觉不通过：衣装更暴露、参考服饰与面部身份保持弱、金色星环变成星芒；图已保留且不列入公开精选。评分来自 Codex 视觉检查，不代表用户批准。
+- 已复核 8/8 正式任务全部有 completed manifest、实际存在的输出与评分，覆盖 5/5 工作流及 CLI/DSH/Codex；12 个原始画布工作流哈希全部不变。M5 尚有视觉验收和 DSH 输出前缀契约缺口，保持 M6/M7 门禁。
 
 ## 2026-10-24
 
