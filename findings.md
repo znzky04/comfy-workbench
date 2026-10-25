@@ -28,6 +28,10 @@
 - Codex 已配置官方 `comfy-mcp` 精简工具白名单，目标为 `127.0.0.1:8188`。
 - 2026-10-25 复核发现 comfy-cli 默认工作区曾漂移到 C 盘默认目录；已通过官方 `set-default` 纠正为 `E:\AI\ComfyUI-Workspace\ComfyUI\ComfyUI`，`server_info` 已确认新路径。
 - DSH 安装 `dsh-comfyui 0.5.5`，支持预设 ZIP v1、参数和技能包。
+- 2026-10-25 DSH 实测：v0.1.1 预设经插件导入接口新增 5 条运行工作流（新 id），旧「主Anima」保留，库内共 6 条；导入不覆盖既有记录。
+- DSH 用时崎狂三任务实际提交成功（`client=dsh`，seed 240201），说明插件参数覆盖与提交链路可用；其输出沿用工作流内置 `SaveImage` 前缀 `anima`，未走项目唯一前缀约定。
+- 2026-10-25 重启后环境为 ComfyUI **0.42.5**；`comfy/ldm/modules/attention.py` 的 blob 在 v0.42.3 与当前完全一致（`abed292b…`），因此后续 in-context 失败不是升级引入。
+- in-context 兼容是**两层**问题：第一层 `preferred_attention` 关键字（已由 0.42.3 补丁解决），第二层 `Attention.forward` 把 q/k/v 包成 `AttentionTensorContainer` 后仍调用 `self.attn_op`，节点内函数按 Tensor 取 `.shape` 失败。补丁只解决第一层，第二层未动，交回 Codex 处理。
 - DSH 预设导入永远创建新记录，不覆盖旧工作流。
 - ComfyUI 当前环境曾记录为 0.42.3、Python 3.13.12、RTX 5070 Ti Laptop 12GB。
 - 当前 8188 未监听；doctor 能在约 1.4 秒内返回“请手动打开 Desktop”，且未启动任何进程。

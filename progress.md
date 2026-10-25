@@ -40,3 +40,14 @@
 - 官方 comfy-mcp 随后成功完成 Anima 标准烟雾测试，输出 `E:\Comfy-Desktop\ComfyUI-Shared\output\anima_00002_.png`，证明 MCP 主链路正常。
 - 已形成 `docs/M5_DSH_HANDOFF.md` 和版本化兼容补丁；下一步交给 DSH 导入预设、运行狂三并在用户手动关闭/重开 Desktop 的配合下处理兼容问题。M5 仍未通过，M6/M7 保持锁定。
 - DSH 交接包 v0.1.1 已生成并验证，SHA-256 为 `6399fd021dd48c0595d2da7b4d5b9e9e2995958f13bdcf359fadfaa2e1828f3c`；v0.1.0 和旧“主Anima”备份均保留。
+
+## 2026-10-25（DSH 接手）
+
+- 核验基线：HEAD `4c30eb8`，工作树干净；未重跑 Codex 已完成的 6 个任务。
+- 预设 v0.1.1 SHA-256 与预期一致，`comfy-demo dsh verify` 通过（5 条）；经插件导入接口新增 5 条库记录，旧“主Anima”保留，库内共 6 条。
+- 时崎狂三按 `benchmarks/characters.json` 以 `anima.standard.v1` 运行成功（seed 240201、832×1216、28 步、CFG 4.5，26.3 秒），输出 `E:\Comfy-Desktop\ComfyUI-Shared\output\anima_00003_.png`，补录 `client=dsh` manifest 并完成人工评分。
+- 环境漂移：重启后 ComfyUI 为 **0.42.5**（交接时为 0.42.3）；`comfy/ldm/modules/attention.py` 在 v0.42.3 与当前字节一致，排除升级导致本次失败。
+- `comfy-demo doctor` 通过（依赖 9/9、自定义节点 3/3、队列空、E 盘 175.49 GB）；`workflow validate --all --remote` 静态 5/5 无错误，但输出中没有逐工作流远程预检结论。
+- 应用 `comfyui-anima-incontext-comfyui-0.42.3.diff`（用户关闭 Desktop 后备份并应用，`git apply --check` 与应用均 clean，`py_compile` 通过，节点目录无自带测试）。
+- DSH 额外 in-context 测试在 KSampler 失败：`'AttentionTensorContainer' object has no attribute 'shape'`，prompt `3c705098…`，manifest 已保存为失败记录（`benchmark_task_id=null`，不计入正式任务）。
+- 判定补丁只解决第一层（`preferred_attention`），第二层需要容器解包；按用户选择“B 保持现状、交回 Codex”，已写 `docs/M5_CODEX_HANDOFF_FROM_DSH.md`。M5 仍未通过，M6/M7 门禁保持锁定。
