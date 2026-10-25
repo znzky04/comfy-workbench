@@ -17,6 +17,10 @@ def test_dsh_bundle_is_preset_v1_with_five_workflows(tmp_path: Path) -> None:
         assert manifest["count"] == 5
         assert sum(item["requireSkill"] for item in manifest["workflows"]) == 3
         assert all(item["skill"] is not None for item in manifest["workflows"])
+        for workflow in manifest["workflows"]:
+            prefix = next(p for p in workflow["parameters"] if p["name"] == "output_prefix")
+            assert prefix["inputKey"] == "filename_prefix"
+            assert prefix["nodeId"] in workflow["workflow"]
 
 
 def test_mirror_bindings_are_exported_with_the_same_parameter_name(tmp_path: Path) -> None:

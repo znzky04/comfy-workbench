@@ -69,6 +69,18 @@ def _parameters(definition: WorkflowDefinition, workflow: dict[str, Any]) -> lis
                 item["upload"] = "image"
                 item["subfolder"] = "comfyui-demo"
             result.append(item)
+    result.append(
+        {
+            "id": str(uuid.uuid5(uuid.NAMESPACE_URL, f"{definition.workflow_id}:output_prefix")),
+            "name": "output_prefix",
+            "label": "权威输出前缀（每个任务必须唯一）",
+            "type": "string",
+            "nodeId": definition.save_node,
+            "inputKey": "filename_prefix",
+            "default": f"comfyui-demo/dsh/{definition.workflow_id}",
+            "description": "运行前传入 comfyui-demo/YYYY-MM-DD/workflow-id/job-id_seed_index；不得复用 job-id。",
+        }
+    )
     return result
 
 
