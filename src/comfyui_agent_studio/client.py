@@ -138,19 +138,29 @@ class ComfyClient:
                         continue
                     subfolder = artifact.get("subfolder", "")
                     artifact_type = artifact.get("type", "output")
-                    root = self.settings.paths.workspace / artifact_type
+                    if artifact_type == "output":
+                        root = self.settings.paths.canonical_output_root.parent
+                    elif artifact_type == "input":
+                        root = self.settings.paths.canonical_input_root
+                    else:
+                        root = self.settings.paths.workspace / artifact_type
                     paths.append((root / subfolder / filename).resolve())
         return paths
 
     def installed_dependencies(self, names: list[str]) -> dict[str, bool]:
-        model_root = self.settings.paths.workspace / "models"
-        if not model_root.is_dir():
-            return {name: False for name in names}
+        model_roots = self.settings.paths.model_roots or [
+            self.settings.paths.workspace / "models"
+        ]
         wanted = set(names)
         found: set[str] = set()
-        for path in model_root.rglob("*"):
-            if path.is_file() and path.name in wanted:
-                found.add(path.name)
-                if found == wanted:
-                    break
+        for model_root in model_roots:
+            if not model_root.is_dir():
+                continue
+            for path in model_root.rglob("*"):
+                if path.is_file() and path.name in wanted:
+                    found.add(path.name)
+                    if found == wanted:
+                        break
+            if found == wanted:
+                break
         return {name: name in found for name in names}

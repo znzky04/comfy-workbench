@@ -72,7 +72,7 @@ created → submitted → queued → running
 权威前缀为：
 
 ```text
-ComfyUI/output/comfyui-demo/YYYY-MM-DD/<workflow-id>/<job-id>_<seed>_<index>.png
+E:/Comfy-Desktop/ComfyUI-Shared/output/comfyui-demo/YYYY-MM-DD/<workflow-id>/<job-id>_<seed>_<index>.png
 ```
 
 所有入口返回权威绝对路径；不覆盖、不复制、不自动删除。公开网站只能复制人工批准、经过脱敏检查的精选图片。

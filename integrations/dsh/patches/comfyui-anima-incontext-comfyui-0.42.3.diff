@@ -1,0 +1,25 @@
+--- a/incontext.py
++++ b/incontext.py
+@@ -135,14 +135,20 @@
+     differs).
+     """
+ 
+-    def ref_attn_op(q_B_S_H_D, k_B_S_H_D, v_B_S_H_D, transformer_options={}):
++    def ref_attn_op(q_B_S_H_D, k_B_S_H_D, v_B_S_H_D, transformer_options={}, **kwargs):
+         if (
+             not state.active
+             or state.bias_B is None
+             or k_B_S_H_D.shape[1] != state.total_tokens
+             or q_B_S_H_D.shape[1] != state.total_tokens
+         ):
+-            return fallback_op(q_B_S_H_D, k_B_S_H_D, v_B_S_H_D, transformer_options=transformer_options)
++            return fallback_op(
++                q_B_S_H_D,
++                k_B_S_H_D,
++                v_B_S_H_D,
++                transformer_options=transformer_options,
++                **kwargs,
++            )
+ 
+         # (B, S, H, D) -> (B, H, S, D)
+         q = q_B_S_H_D.transpose(1, 2)

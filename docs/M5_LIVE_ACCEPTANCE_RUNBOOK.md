@@ -50,3 +50,5 @@ SHA-256: dd08bff4141b774db93c5ecac1d4d916660afbce496f13f9215e9e042cb1dac2
 - Codex 与 DSH 各有至少一次成功提交，并与注册表 SHA-256 一致。
 - 失败重试不覆盖旧图，同一错误连续三次立即停止。
 - 完成人工评分后，才可把 M5 标记通过并开始 M6。
+
+当前交接状态与 ComfyUI 0.42.3 的 in-context 兼容阻塞见 `docs/M5_DSH_HANDOFF.md`。

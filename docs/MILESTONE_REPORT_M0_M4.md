@@ -17,14 +17,14 @@
 
 ## M1：统一核心与生命周期
 
-状态：离线部分通过；在线环境检查待用户启动 Desktop。
+状态：通过。2026-10-25 在线 doctor 已确认服务、GPU、模型和节点。
 
 - 建立 E 盘 `.venv`，实现配置、HTTP 客户端、doctor、错误分类和更新 runbook。
 - HTTPX 对本地连接禁用环境代理，8188 未监听时 doctor 约 1.4 秒结构化失败。
 - 活动代码无 subprocess、Popen、taskkill、ensure_server 或自动更新逻辑。
 - `doctor --no-remote` 已验证工作区、输出目录、磁盘和静态工作流。
 
-待在线验收：ComfyUI 版本、队列、GPU/显存、模型和自定义节点。
+在线结果：ComfyUI 0.42.3、RTX 5070 Ti Laptop 约 12 GB，9 个模型依赖与 3 个关键节点全部可用；Desktop 使用 E 盘 Shared 输入/输出目录。
 
 ## M2：工作流注册与运行记录
 

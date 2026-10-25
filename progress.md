@@ -24,3 +24,19 @@
 - 已实际执行“ComfyUI 未启动”提交测试：命令返回 1，任务 manifest 进入 `failed`，保留 `seed=0`、工作流哈希和错误详情，且没有启动进程或生成/删除图片。
 - 通过官方 comfy-cli 将 comfy-mcp 默认工作区从错误的 C 盘目录纠正为 E 盘真实 ComfyUI；`server_info` 已确认，服务仍保持未启动。
 - M5 受外部状态阻塞：需要用户手动启动 ComfyUI Desktop；M5 通过前保持 M6/M7 门禁。
+- 用户已手动打开 Desktop；在线初检发现两个相同 `main.py` 进程均未监听 8188，且 Desktop 实际使用 E 盘 Shared 输入/输出目录。正在只读检查启动日志，不会结束或重启进程。
+- 日志确认两个 PID 是父子进程而非双实例，服务器已进入监听阶段；项目配置、输出路径解析和模型扫描已改为 Desktop 的 E 盘 Shared 目录。
+- 官方 comfy-mcp 已确认服务在线、ComfyUI 0.42.3 和约 10.77 GiB 可用显存；M5 进入在线校验阶段。
+- 完整 doctor 通过：9 个模型/LoRA/upscaler 和 3 个关键自定义节点均可用，队列为空。
+- 官方 comfy-mcp 对 5 条注册工作流逐一预检，全部 `valid=true`、零错误、零警告、无付费节点。
+- `anima.standard.v1` 首个真实任务（原创蒸汽朋克工匠）成功，约 30 秒完成，Shared 输出路径和 manifest 正确。
+- 首图人工验收：机械臂、赤铜短发和工坊材质清晰；不足是未完整全身、服装比非性化目标更暴露。图片保留并补录评分字段。
+- `animagine.standard.v1` 首次真实任务（芙莉莲）技术完成但视觉失败：没有人物，仅有金色对称抽象图形。原图保留，下一步改为检查工作流链路而非重复生成。
+- Animagine 诊断完成：模型、VAE、节点连接、采样器和 PNG 内嵌参数均正常；对照官方模型卡后，将两条 Animagine 评测 prompt 改为标签式结构并把质量标签移到末尾，芙莉莲纠正性复测使用新 seed `240212`。
+- Animagine 芙莉莲纠正性复测和原创赛博剑士均成功并评分；首次抽象失败图保留。
+- 拉琪 img2img 成功并评分；身份保持强，但深色背景和非性化提示遵循不足。
+- 海梦与海洋星象祭司两条 HQ 2× 任务串行成功并评分，没有显存错误。
+- 拉琪 in-context 通过官方 comfy-mcp 完成上传、预检和提交，但因自定义节点不兼容 ComfyUI 0.42.3 的 `preferred_attention` 在采样阶段失败，manifest 已进入 failed；未进行无改动重试。
+- 官方 comfy-mcp 随后成功完成 Anima 标准烟雾测试，输出 `E:\Comfy-Desktop\ComfyUI-Shared\output\anima_00002_.png`，证明 MCP 主链路正常。
+- 已形成 `docs/M5_DSH_HANDOFF.md` 和版本化兼容补丁；下一步交给 DSH 导入预设、运行狂三并在用户手动关闭/重开 Desktop 的配合下处理兼容问题。M5 仍未通过，M6/M7 保持锁定。
+- DSH 交接包 v0.1.1 已生成并验证，SHA-256 为 `6399fd021dd48c0595d2da7b4d5b9e9e2995958f13bdcf359fadfaa2e1828f3c`；v0.1.0 和旧“主Anima”备份均保留。

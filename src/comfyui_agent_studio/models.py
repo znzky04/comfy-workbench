@@ -59,6 +59,17 @@ class StateEvent(BaseModel):
     detail: str | None = None
 
 
+class HumanEvaluation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    identity_or_signature_features_1_to_5: int = Field(ge=1, le=5)
+    composition_1_to_5: int = Field(ge=1, le=5)
+    anatomy_1_to_5: int = Field(ge=1, le=5)
+    material_and_detail_1_to_5: int = Field(ge=1, le=5)
+    overall_1_to_5: int = Field(ge=1, le=5)
+    notes: str
+
+
 class JobManifest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -83,5 +94,7 @@ class JobManifest(BaseModel):
     started_at: datetime | None = None
     finished_at: datetime | None = None
     output_files: list[str] = Field(default_factory=list)
+    benchmark_task_id: str | None = None
+    human_evaluation: HumanEvaluation | None = None
     error_category: str | None = None
     error_detail: str | None = None

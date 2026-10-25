@@ -4,7 +4,7 @@ import pytest
 
 from comfyui_agent_studio.errors import JobError
 from comfyui_agent_studio.manifests import ManifestStore
-from comfyui_agent_studio.models import JobManifest, JobStatus
+from comfyui_agent_studio.models import HumanEvaluation, JobManifest, JobStatus
 
 
 def make_manifest() -> JobManifest:
@@ -38,3 +38,22 @@ def test_state_transitions_are_checked(tmp_path: Path) -> None:
     assert manifest.finished_at is not None
     with pytest.raises(JobError):
         store.transition(manifest, JobStatus.RUNNING)
+
+
+def test_manifest_keeps_benchmark_evaluation(tmp_path: Path) -> None:
+    store = ManifestStore(tmp_path)
+    manifest = make_manifest()
+    manifest.benchmark_task_id = "steampunk-engineer"
+    manifest.human_evaluation = HumanEvaluation(
+        identity_or_signature_features_1_to_5=5,
+        composition_1_to_5=4,
+        anatomy_1_to_5=4,
+        material_and_detail_1_to_5=5,
+        overall_1_to_5=4,
+        notes="test",
+    )
+    store.save(manifest)
+    loaded = store.load(manifest.job_id)
+    assert loaded.benchmark_task_id == "steampunk-engineer"
+    assert loaded.human_evaluation is not None
+    assert loaded.human_evaluation.overall_1_to_5 == 4

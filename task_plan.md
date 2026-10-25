@@ -18,11 +18,11 @@
 | 阶段 | 状态 | 完成条件 |
 |---|---|---|
 | M0 文档、基线、回滚 | complete | 方案、哈希、DSH 备份、Git 与磁盘记录已完成 |
-| M1 统一核心与生命周期 | offline_passed | 核心、doctor 和无自动启停已验；在线环境检查待 Desktop |
+| M1 统一核心与生命周期 | complete | 在线 doctor、依赖、显存和无自动启停均通过 |
 | M2 工作流注册与运行记录 | offline_passed | 5 条注册、12 条登记、schema 和 manifest 已验 |
 | M3 CLI、热文件夹、兼容包装 | offline_passed | 新 CLI、热文件失败留证和兼容包装已验 |
 | M4 DSH/Codex 集成 | offline_passed | DSH ZIP/技能包/runbook 已验；UI 导入待 M5 |
-| M5 真实生图验收 | pending | 8 个角色任务及 DSH/Codex 各一次真实提交 |
+| M5 真实生图验收 | in_progress | 6 个正式任务完成；待 DSH 狂三、in-context 兼容修复和 Codex 正式复跑 |
 | M6 本地网页 | pending | FastAPI 工作台、SSE、上传、历史、视觉和浏览器测试 |
 | M7 个人网站项目页 | pending | 精选导出、项目页、网站构建与回归测试 |
 
@@ -44,4 +44,9 @@
 | editable 构建缺少 `editables` | 1 | 补装 `editables`，随后 editable 安装成功 |
 | doctor 在系统代理下访问本机 8188 返回 502 | 1 | HTTPX 设置 `trust_env=False`，端口关闭时直接结构化返回 |
 | 清理自建 pip 临时目录被安全策略拒绝 | 2 | 已加入 `.gitignore`，不再尝试删除，不影响工程或 Git |
+| Animagine 芙莉莲首次输出无人物，仅抽象金色图形 | 1 | 保留原图并停止同参重试；检查 API 工作流节点链和模型/VAE 配置 |
+| 项目虚拟环境缺少 Pillow，无法读取 PNG 元数据 | 1 | 不安装新依赖，改用 ComfyUI 自带虚拟环境读取成功 |
+| in-context 自定义节点不接受 ComfyUI 0.42.3 的 `preferred_attention` | 1 | MCP 失败记录已落盘；不盲重试，交接 DSH 在用户关闭 Desktop 后应用版本化兼容补丁 |
+| `ruff check .` 把只读 `legacy/` 旧源码纳入检查并报告既存问题 | 1 | 不修改历史源码；改用维护范围 `src tests` 和四个兼容包装脚本验收 |
+| 首版外部节点兼容补丁 hunk 行数声明错误 | 1 | 修正为精确单行替换 hunk，并重新执行 `git apply --check` |
 

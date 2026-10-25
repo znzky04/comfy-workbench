@@ -82,6 +82,8 @@ Get-FileHash .\workflows\api\*.json -Algorithm SHA256
 
 ## M5：8 个角色真实验收
 
+当前接手时先阅读 `docs/M5_DSH_HANDOFF.md`。Codex 已完成 6 个正式任务；不要重跑。使用 v0.1.1 预设包，先完成 DSH 狂三任务，再按交接文档处理 in-context 兼容阻塞。
+
 最终名单：
 
 - [ ] 拉琪 img2img

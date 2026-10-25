@@ -10,3 +10,7 @@ def test_local_paths_resolve_under_project() -> None:
     assert settings.paths.workflow_root.is_absolute()
     assert settings.paths.manifest_root.is_absolute()
     assert settings.paths.workspace == Path("E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI")
+    assert settings.paths.canonical_input_root == Path("E:/Comfy-Desktop/ComfyUI-Shared/input")
+    assert settings.paths.canonical_output_root == Path(
+        "E:/Comfy-Desktop/ComfyUI-Shared/output/comfyui-demo"
+    )

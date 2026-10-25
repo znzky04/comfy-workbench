@@ -8,7 +8,12 @@ job_timeout_seconds = 900
 workspace = "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI"
 workflow_root = "workflows/api"
 manifest_root = "runs"
-canonical_output_root = "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI/output/comfyui-demo"
+canonical_input_root = "E:/Comfy-Desktop/ComfyUI-Shared/input"
+canonical_output_root = "E:/Comfy-Desktop/ComfyUI-Shared/output/comfyui-demo"
+model_roots = [
+  "E:/Comfy-Desktop/ComfyUI-Shared/models",
+  "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI/models",
+]
 
 [retention]
 delete_generated_images = false

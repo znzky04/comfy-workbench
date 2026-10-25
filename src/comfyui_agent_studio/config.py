@@ -40,7 +40,9 @@ class PathsConfig(BaseModel):
     workspace: Path
     workflow_root: Path = Path("workflows/api")
     manifest_root: Path = Path("runs")
+    canonical_input_root: Path
     canonical_output_root: Path
+    model_roots: list[Path] = Field(default_factory=list)
 
 
 class RetentionConfig(BaseModel):
@@ -90,7 +92,9 @@ class Settings(BaseModel):
             if not value.is_absolute():
                 setattr(self.paths, field_name, (self.project_root / value).resolve())
         self.paths.workspace = self.paths.workspace.resolve()
+        self.paths.canonical_input_root = self.paths.canonical_input_root.resolve()
         self.paths.canonical_output_root = self.paths.canonical_output_root.resolve()
+        self.paths.model_roots = [path.resolve() for path in self.paths.model_roots]
         return self
 
 

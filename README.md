@@ -6,7 +6,7 @@
 
 - 请由用户手动启动、停止和更新 ComfyUI Desktop。
 - 本项目只连接 `http://127.0.0.1:8188`，绝不自动启动或强杀 ComfyUI。
-- 图片的唯一权威位置是 `E:\AI\ComfyUI-Workspace\ComfyUI\ComfyUI\output\comfyui-demo`。
+- Desktop 当前实例的图片权威位置是 `E:\Comfy-Desktop\ComfyUI-Shared\output\comfyui-demo`。
 - 历史 `output/` 与 `kurumi/` 原地保留；新流程不再向项目复制图片。
 - 不会自动删除成功图、失败图或未采用图。
 
@@ -77,6 +77,9 @@ comfy-demo dsh verify integrations\dsh\releases\comfyui-demo-dsh-presets-v0.1.0.
 ```
 
 ## 文档
+
+- DSH 当前交接入口：`docs/M5_DSH_HANDOFF.md`
+- M5 在线验收：`docs/M5_LIVE_ACCEPTANCE_RUNBOOK.md`
 
 - `ENGINEERING_UPGRADE_PLAN.md`：工程总方案。
 - `DSH_IMPLEMENTATION_PLAN.md`：DSH 阶段化执行清单。
