@@ -1,5 +1,14 @@
 # Progress
 
+## 2026-10-25（Codex 再接手）
+
+- 阅读 DSH 原始压缩会话、提交 b3daf0b 和交回文档，确认狂三已完成，阻塞在 in-context 容器接口。
+- Desktop 关闭期间备份节点为 `incontext.py.bak-codex-containers-20261025-184155`，完成第二层容器兼容修复。
+- 新增 `scripts/check_anima_attention_compat.py`：修复前 2 项容器测试复现原故障；修复后 6 项全部通过。运行使用 ComfyUI 自带 torch，不新增依赖。
+- 下一步：记录版本化补丁、复核项目测试，然后等待用户手动打开 Desktop，使用官方 comfy-mcp 运行正式拉琪 in-context。
+- 版本化容器补丁已保存，反向适用性检查通过；节点最终 SHA-256 为 `ee9b7f3c4d275779ff4717c5bee3024f6e8b6a2deb8d48c4d1a1b8351375e4e3`。
+- 最终离线验收：项目 pytest 19 passed，维护范围 Ruff 通过，5/5 注册工作流静态校验通过，注意力专项 6/6 通过。详细恢复/回滚记录见 `docs/ANIMA_ATTENTION_COMPATIBILITY.md`。
+
 ## 2026-10-24
 
 - 读取并采用 `planning-with-files-zh`、`codebase-recon`、`frontend-design`、`webapp-testing` 指引。

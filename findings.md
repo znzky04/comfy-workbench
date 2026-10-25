@@ -1,5 +1,13 @@
 # Findings
 
+## Codex 再接手（2026-10-25）
+
+- 已只读解压并核对 DSH 会话 `session-c184de8b-6602-4d29-a8c7-e685336db7a1`；末轮确认为用户选择保持第一层补丁、交回 Codex，提交为 `b3daf0b`。
+- 接手时 Desktop 已关闭：8188 未监听，也无 ComfyUI main.py 进程。节点文件 SHA-256 与 DSH 交接完全一致，E 盘余量约 173.59 GiB。
+- 先用本机 ComfyUI 的真实 `AttentionTensorContainer` 和 `wrap_attn` 定义重现容器失败，再修复节点：形状检查只 peek，回退保留原容器和参数，仅自定义 SDPA 分支 take。参考偏置计算保持不变。
+- 第一版容器解包发现 PyTorch Tensor 也有带索引的 take 方法；改为先识别原始 Tensor，避免旧接口回归。6 项 CPU 针对性测试通过，包含真实容器、普通 Tensor、禁用/中性/序列不匹配回退和核心 container_function override。
+- 运行中的服务没有被自动管理；已请求用户手动打开 Desktop，真实采样仍待启动后执行。
+
 ## 当前工程
 
 - 项目根目录不是 Git 仓库。

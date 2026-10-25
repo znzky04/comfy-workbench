@@ -22,7 +22,7 @@
 | M2 工作流注册与运行记录 | offline_passed | 5 条注册、12 条登记、schema 和 manifest 已验 |
 | M3 CLI、热文件夹、兼容包装 | offline_passed | 新 CLI、热文件失败留证和兼容包装已验 |
 | M4 DSH/Codex 集成 | offline_passed | DSH ZIP/技能包/runbook 已验；UI 导入待 M5 |
-| M5 真实生图验收 | in_progress | 7 个正式任务完成（含 DSH 时崎狂三）；待 in-context 容器兼容修复和 Codex 正式复跑 |
+| M5 真实生图验收 | in_progress | 7 个正式任务完成；容器修复及 6 项离线专项测试已通过，待用户启动 Desktop 后由 Codex 正式复跑 |
 | M6 本地网页 | pending | FastAPI 工作台、SSE、上传、历史、视觉和浏览器测试 |
 | M7 个人网站项目页 | pending | 精选导出、项目页、网站构建与回归测试 |
 
@@ -52,4 +52,6 @@
 | DSH 导入预设后库内出现 6 条记录（5 新 + 旧主Anima） | 1 | 属预期；导入只新增不覆盖，已核对 |
 | in-context 补丁应用后仍失败：`'AttentionTensorContainer' object has no attribute 'shape'` | 1 | 判定为第二层兼容问题（容器未解包），停止重试；保持当前补丁状态并交回 Codex，证据见 `docs/M5_CODEX_HANDOFF_FROM_DSH.md` |
 | 重启后 ComfyUI 为 0.42.5 而非交接时的 0.42.3 | 1 | 记录环境漂移；核对 `attention.py` 字节一致，排除为本次失败原因 |
+| 容器兼容测试在旧节点复现 `.shape` 故障 | 1 | 定向修复 peek/take 生命周期，6 项 CPU 测试通过 |
+| 容器解包初版误将 Tensor.take 当无参容器方法 | 1 | 先用 isinstance(torch.Tensor) 保留普通 Tensor 路径，回归测试通过 |
 

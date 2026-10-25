@@ -1,0 +1,46 @@
+--- a/incontext.py
++++ b/incontext.py
+@@ -135,12 +135,18 @@
+     differs).
+     """
+ 
++    def peek(tensor):
++        return tensor.peek() if hasattr(tensor, "peek") else tensor
++
++    def take(tensor):
++        return tensor if isinstance(tensor, torch.Tensor) else tensor.take()
++
+     def ref_attn_op(q_B_S_H_D, k_B_S_H_D, v_B_S_H_D, transformer_options={}, **kwargs):
+         if (
+             not state.active
+             or state.bias_B is None
+-            or k_B_S_H_D.shape[1] != state.total_tokens
+-            or q_B_S_H_D.shape[1] != state.total_tokens
++            or peek(k_B_S_H_D).shape[1] != state.total_tokens
++            or peek(q_B_S_H_D).shape[1] != state.total_tokens
+         ):
+             return fallback_op(
+                 q_B_S_H_D,
+@@ -150,16 +156,18 @@
+                 **kwargs,
+             )
+ 
++        # Consume containers only on the reference-biased SDPA path.
++        # Fallback above retains the original containers and backend overrides.
++        q, k, v = take(q_B_S_H_D), take(k_B_S_H_D), take(v_B_S_H_D)
++        batch, sequence = q.shape[:2]
+         # (B, S, H, D) -> (B, H, S, D)
+-        q = q_B_S_H_D.transpose(1, 2)
+-        k = k_B_S_H_D.transpose(1, 2)
+-        v = v_B_S_H_D.transpose(1, 2)
++        q, k, v = q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2)
+ 
+         bias = state.bias_for(q.device, q.dtype)
+ 
+         out = F.scaled_dot_product_attention(q, k, v, attn_mask=bias)
+         # (B, H, S, D) -> (B, S, H*D)
+-        out = out.transpose(1, 2).reshape(q_B_S_H_D.shape[0], q_B_S_H_D.shape[1], -1)
++        out = out.transpose(1, 2).reshape(batch, sequence, -1)
+         return out
+ 
+     return ref_attn_op
