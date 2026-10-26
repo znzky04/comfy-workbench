@@ -29,6 +29,8 @@
 - 新增/扩展测试：`test_retention_regressions.py`、`test_client_boundaries.py`、`test_inbox.py`、`test_manifests.py`。使用替身后端和测试临时文件，未生成新图。
 - 本机证据在忽略的 `runs/engineering-review`。远端 CI 结果单独追加，不能将此前 43 项的 CI 当成本轮代码验收。
 
+最终远端结果：修复提交 `fcc6b2e` 的 [Actions 40295864777](https://github.com/znzky04/comfyui-agent-studio/actions/runs/40295864777) 四环境全部通过（Windows/Linux × Python 3.11/3.13）；每个环境 65 项测试、Ruff、离线示例及工作流静态校验通过。日志核对保存在忽略的 runs/engineering-review/ci-40295864777。后续仅文档结果更新，不修改已验证代码。
+
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
 .\.venv\Scripts\python.exe -m ruff check src tests scripts examples
