@@ -21,7 +21,7 @@ python -m venv .venv
 .\.venv\Scripts\comfy-demo.exe workflow validate --all
 ```
 
-私有期间克隆仍需要访问权限。常规测试与示例不连接 ComfyUI，不需要作者的画布、参考图或本机目录。离线检查与 GPU 验收分开；本轮未重新生图。CI 已配置 Windows/Linux、Python 3.11/3.13，远程实际运行状态以 GitHub Actions 为准。
+私有期间克隆仍需要访问权限。常规测试与示例不连接 ComfyUI，不需要作者的画布、参考图或本机目录。离线检查与 GPU 验收分开；本轮未重新生图。[CI 四环境](https://github.com/znzky04/comfyui-agent-studio/actions/runs/40291884948)已实际通过：Windows/Linux × Python 3.11/3.13，每个环境包含 43 项测试、Ruff、离线示例和工作流静态校验；这不代表跨平台 GPU 验收。
 
 ## 连接你自己的 ComfyUI
 
