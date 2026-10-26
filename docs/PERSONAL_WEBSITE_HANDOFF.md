@@ -4,6 +4,7 @@
 
 用户确定仓库名改为 `comfy-workbench`，展示名为 **Comfy Workbench · 星夜绘图室**。
 新仓库链接：`https://github.com/znzky04/comfy-workbench`，可见性保持私有。
+改名后验证：[CI 40302324701](https://github.com/znzky04/comfy-workbench/actions/runs/40302324701) 四环境全部通过，本机 65 项测试及 README 链接检查通过。
 工程 README 已围绕开发动机、实际用途、下载后的能力和使用步骤重写。
 网页标题、CLI 帮助和 API 展示名已同步；Python 导入名/发行元数据及 CLI 命令保留兼容。
 网站目录没有改动。网站聊天可同步项目卡/详情标题和源码链接；现有

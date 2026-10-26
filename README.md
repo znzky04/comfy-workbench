@@ -124,7 +124,7 @@ Codex 使用说明见 [runbook](integrations/codex/RUNBOOK.md)。DSH 通过版�
 
 ## 验证到了什么程度？
 
-[四环境 CI](https://github.com/znzky04/comfy-workbench/actions/runs/40295864777) 已通过：Windows/Linux × Python 3.11/3.13，每个环境 65 项测试、Ruff、离线示例和工作流静态校验通过。
+[四环境 CI](https://github.com/znzky04/comfy-workbench/actions/runs/40302324701) 已通过：Windows/Linux × Python 3.11/3.13，每个环境 65 项测试、Ruff、离线示例和工作流静态校验通过。
 
 维护者 Windows Desktop 上完成了 8 个正式角色任务，覆盖 5 条工作流，并分别记录技术结果和视觉不足。Linux 的离线 CI 不等于 Linux GPU 验收；另一台全新电脑从安装到首次生图，尚未作为独立验收完成。
 
