@@ -15,7 +15,7 @@ from .models import GenerationRequest
 from .registry import WorkflowRegistry
 from .service import GenerationService
 
-app = typer.Typer(help="ComfyUI Agent Studio：连接用户手动管理的 ComfyUI Desktop。")
+app = typer.Typer(help="Comfy Workbench：连接用户手动管理的 ComfyUI Desktop。")
 workflow_app = typer.Typer(help="查看和校验版本化工作流。")
 job_app = typer.Typer(help="查看、等待和取消任务。")
 dsh_app = typer.Typer(help="构建和校验 DSH preset v1 包。")

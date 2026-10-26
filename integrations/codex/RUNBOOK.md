@@ -1,4 +1,4 @@
-# Codex 使用 ComfyUI Agent Studio
+# Codex 使用 Comfy Workbench
 
 ## 前置条件
 

@@ -1,4 +1,13 @@
-# ComfyUI Agent Studio：个人网站交接说明
+# Comfy Workbench：个人网站交接说明
+
+## 命名更新（2026-10-26）
+
+用户确定仓库名改为 `comfy-workbench`，展示名为 **Comfy Workbench · 星夜绘图室**。
+新仓库链接：`https://github.com/znzky04/comfy-workbench`，可见性保持私有。
+工程 README 已围绕开发动机、实际用途、下载后的能力和使用步骤重写。
+网页标题、CLI 帮助和 API 展示名已同步；Python 导入名/发行元数据及 CLI 命令保留兼容。
+网站目录没有改动。网站聊天可同步项目卡/详情标题和源码链接；现有
+`/projects/comfyui-agent-studio` 路由和素材目录仍是现有网站结构中的历史标识，是否调整由网站聊天处理。
 
 > 更新：2026-10-26。交给负责个人网站的 Codex 对话阅读。
 > 本文记录网站集成的事实与范围；最新状态见下方更新。部署仍需用户明确授权。

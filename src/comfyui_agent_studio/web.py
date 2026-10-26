@@ -66,7 +66,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         except asyncio.CancelledError:
             pass
 
-    app = FastAPI(title="ComfyUI Agent Studio", lifespan=lifespan)
+    app = FastAPI(title="Comfy Workbench", lifespan=lifespan)
     app.state.service = service
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
 

@@ -41,6 +41,7 @@ def image_bytes():
 
 def test_web_schema_csrf_and_host(studio):
     client, _, headers = studio
+    assert "<title>星夜绘图室 · Comfy Workbench</title>" in client.get("/").text
     assert len(client.get("/api/workflows").json()) == 5
     assert client.get("/api/workflows/anima.standard.v1").json()["defaults"]["width"] > 0
     assert client.post("/api/jobs", json={}).status_code == 403

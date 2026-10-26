@@ -27,7 +27,7 @@ with sync_playwright() as playwright:
     page.goto("http://127.0.0.1:8199")
     page.wait_for_load_state("networkidle")
     page.locator(".art-card").first.wait_for()
-    assert page.title() == "星夜绘图室 · ComfyUI Agent Studio"
+    assert page.title() == "星夜绘图室 · Comfy Workbench"
     assert page.locator("#workflow option").count() == 5
     assert page.request.post("http://127.0.0.1:8199/api/jobs", data={}).status == 403
     page.get_by_role("button", name="原创角色", exact=True).click()

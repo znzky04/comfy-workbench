@@ -1,9 +1,9 @@
-# ComfyUI Agent Studio — Core Source Review
+# Comfy Workbench — Core Source Review
 
 A review snapshot of the Python engineering layer: request validation, workflow registry,
 parameter mapping, persistent task records and backend reconciliation.
 
-这是从实际工程提取的本地源码审阅包。它不是完整生图发行版：不包含生产工作流、模型、参考图、图库、运行记录、私人提示词或本机配置。2026-10-26 用户选择先使用私有 GitHub 仓库，因此此包仅留作本地审阅，不再通过网站提供下载。完整源码位于 https://github.com/znzky04/comfyui-agent-studio ，需要仓库访问权限。
+这是从实际工程提取的本地源码审阅包。它不是完整生图发行版：不包含生产工作流、模型、参考图、图库、运行记录、私人提示词或本机配置。2026-10-26 用户选择先使用私有 GitHub 仓库，因此此包仅留作本地审阅，不再通过网站提供下载。完整源码位于 https://github.com/znzky04/comfy-workbench ，需要仓库访问权限。
 
 ## Installation / 安装
 
