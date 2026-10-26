@@ -1,5 +1,5 @@
 {
   "schema_version": 1,
-  "approved_job_ids": [],
-  "notice": "Only manually approved artifacts may be exported. This file starts empty by design."
+  "approved_job_ids": ["e4265b17-a226-4680-90ca-cab1f792137a"],
+  "notice": "User approved the single Marin Kitagawa HQ output (00001) for the personal website on 2026-10-26. No other generated images are approved."
 }

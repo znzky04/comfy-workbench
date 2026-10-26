@@ -47,7 +47,23 @@ comfy-demo dsh verify integrations\dsh\releases\comfyui-demo-dsh-presets-v0.1.2.
 
 运行 `comfy-demo studio` 后打开 `http://127.0.0.1:8199`。旧的 `启动画图台.bat` 同样可用。上传、SSE 状态、取消、历史、角色分类和原图详情均使用统一核心；工作台关闭后，ComfyUI 中的任务继续执行，下次启动会恢复状态观察。
 
-`showcase export` 仍保持锁定：本轮用户选择先完成本地工作台，公开图片名单稍后人工批准。个人网站尚未接入。
+个人网站已完成本地集成：新增第 5 张项目卡、`/projects/comfyui-agent-studio` 详情路由与已批准的海梦样例，网站尚未部署。工作台展示图由实际前端离线呈现并明确标注，不作为新的真实生成验收。
+
+`benchmarks/public-selection.json` 当前仅批准海梦 HQ 任务 `e4265b17-a226-4680-90ca-cab1f792137a` 的唯一输出；其他结果不公开。`showcase export` 命令仍是锁定占位，不会自动复制图库。本轮网站只导出批准图的无嵌入元数据 WebP。
+
+## 源码审阅与最小离线示例
+
+源码仓库为私有的 [znzky04/comfyui-agent-studio](https://github.com/znzky04/comfyui-agent-studio)，需要仓库访问权限。网站只链接该仓库，不提供公开源码下载。此前制作的精简审阅包保留为本地文件，不随网站发布；说明见 [docs/review/README.md](docs/review/README.md)。
+
+已安装依赖的本地工程可以直接执行：
+
+```powershell
+.\.venv\Scripts\python.exe examples/offline_review.py
+```
+
+该示例不联网、不提交生图、不要求模型。它在 `runs/offline-review` 下临时创建独立的示例工作流和 JSON，演示参数绑定、seed 0、记录重载和哈希漂移检测，退出时清理自己的临时目录。真实任务恢复仍以现有服务测试与实际生图验收分别验证。
+
+两个工程决策案例及证据见 [docs/ENGINEERING_DECISIONS.md](docs/ENGINEERING_DECISIONS.md)。
 
 ## 工作流
 
@@ -84,6 +100,8 @@ comfy-demo dsh verify integrations\dsh\releases\comfyui-demo-dsh-presets-v0.1.2.
 - DSH 当前交接入口：`docs/M5_DSH_HANDOFF.md`
 - M5 在线验收：`docs/M5_LIVE_ACCEPTANCE_RUNBOOK.md`
 - 本地工作台使用与验收：`docs/M6_LOCAL_STUDIO.md`
+- 网站当前集成、素材审批与验证：`docs/PERSONAL_WEBSITE_HANDOFF.md`
+- 工程决策与个人贡献：`docs/ENGINEERING_DECISIONS.md`
 
 - `ENGINEERING_UPGRADE_PLAN.md`：工程总方案。
 - `DSH_IMPLEMENTATION_PLAN.md`：DSH 阶段化执行清单。

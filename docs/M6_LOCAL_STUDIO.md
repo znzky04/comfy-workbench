@@ -57,7 +57,9 @@ cd E:\AI\Deepseek\comfyui-demo
 
 ## 当前边界
 
-M6 已完成本地功能与视觉验收。用户选择先完成本地工作台、公开图片稍后选，因此 M7 个人网站和公开导出本轮不实施。`benchmarks/public-selection.json` 继续为空，`showcase export` 保持锁定。
+M6 已完成本地功能与视觉验收。2026-10-26，M7 个人网站已完成本地项目卡、详情页与素材集成，尚未部署。`benchmarks/public-selection.json` 当前仅批准海梦 HQ 任务 `e4265b17-a226-4680-90ca-cab1f792137a` 的唯一输出；其他图片不公开。网站的工作台展示图使用既有前端离线呈现该样例，明确标注展示性质，不作为新的 GPU 生成或在线状态验收。`showcase export` 命令仍保持锁定占位，不自动导出图库。
+
+2026-10-26 的最新工程测试记录为 33 passed、1 warning；上面的 30 项与浏览器截图是 2026-10-25 的历史验收。网站 lint、build、桌面/手机交互与素材显示已单独验证；这不替代本地工作台的在线 GPU 验收。源码审阅与离线示例见 `docs/review/README.md`，工程决策见 `docs/ENGINEERING_DECISIONS.md`。
 
 DSH v0.1.2 已包含 output_prefix 参数并验证官方参数处理路径；UI 重导入仍需下次使用 DSH 时执行。角色生成质量与工程功能分别记录：in-context 有技术成功但视觉不合格的样例，网页明确保留其评分。
 
