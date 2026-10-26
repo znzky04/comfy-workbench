@@ -1,9 +1,16 @@
 # Comfy Workbench：个人网站交接说明
 
+## 最新状态：仓库已公开（2026-10-26）
+
+用户明确授权后，`https://github.com/znzky04/comfy-workbench` 已切换为 Public。
+网站聊天可以把源码入口改为公开仓库链接，移除“需仓库访问权限”的说明；本轮没有修改网站目录或部署网站。
+工作流仍标注“原作者未知、许可未确认”，自有工程代码 MIT 不覆盖这些材料。
+以下私有状态和权限提示保留为历史阶段记录，以本节为准。图片审批范围没有扩大。
+
 ## 命名更新（2026-10-26）
 
 用户确定仓库名改为 `comfy-workbench`，展示名为 **Comfy Workbench · 星夜绘图室**。
-新仓库链接：`https://github.com/znzky04/comfy-workbench`，可见性保持私有。
+新仓库链接：`https://github.com/znzky04/comfy-workbench`，当前已按用户明确授权公开。
 改名后验证：[CI 40302324701](https://github.com/znzky04/comfy-workbench/actions/runs/40302324701) 四环境全部通过，本机 65 项测试及 README 链接检查通过。
 工程 README 已围绕开发动机、实际用途、下载后的能力和使用步骤重写。
 网页标题、CLI 帮助和 API 展示名已同步；Python 导入名/发行元数据及 CLI 命令保留兼容。

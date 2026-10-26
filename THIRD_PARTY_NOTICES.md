@@ -26,8 +26,9 @@ images, character rights or a generation pipeline as a whole.
   `workflows/api/*.json`, root workflow JSON and their corresponding original canvases
   are **excluded from this project's MIT grant**. Availability for download is not
   evidence of permission to redistribute or relicense. No author or licence is invented.
-  The full repository remains private; this notice alone does not resolve redistribution
-  permission. Original local graphs are retained unchanged for private use and inspection.
+  The repository was made public on 2026-10-26 at the maintainer's explicit request;
+  this notice and public visibility do not resolve redistribution permission. Original
+  local graphs are retained unchanged; no third-party rights are granted by this notice.
 - The affected subset is not yet mapped to individual graphs. Treat all five registered
   graphs (Anima standard/HQ, Animagine standard, Larkie img2img/incontext) as provenance
   pending for public distribution. Future options are to identify compatible original
