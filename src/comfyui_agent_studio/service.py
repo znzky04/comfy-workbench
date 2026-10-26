@@ -7,7 +7,7 @@ from pathlib import Path
 
 from .client import ComfyClient
 from .config import Settings
-from .errors import JobError
+from .errors import JobError, StudioError
 from .manifests import ManifestStore
 from .models import GenerationRequest, JobManifest, JobStatus
 from .registry import WorkflowRegistry
@@ -93,7 +93,7 @@ class GenerationService:
         client = client or ComfyClient(self.settings)
         try:
             self.store.transition(manifest, JobStatus.RUNNING)
-            outputs: list[str] = []
+            outputs = list(manifest.output_files)
             for prompt_id in manifest.prompt_ids:
                 history = client.wait(prompt_id)
                 outputs.extend(str(path) for path in client.output_paths(history))
@@ -107,6 +107,14 @@ class GenerationService:
             self.store.transition(manifest, target, manifest.error_detail)
             return manifest
         except Exception as exc:
+            # Failed ComfyUI history can already contain successfully saved images.
+            try:
+                self._remember_outputs(
+                    manifest, client, [client.history(pid) for pid in manifest.prompt_ids]
+                )
+            except StudioError:
+                # A lost connection must not mask the original error or erase old outputs.
+                pass
             manifest.error_category = type(exc).__name__
             manifest.error_detail = str(exc)
             self.store.transition(manifest, JobStatus.FAILED, str(exc))
@@ -120,10 +128,45 @@ class GenerationService:
         if manifest.status in {JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED}:
             return manifest
         with ComfyClient(self.settings) as client:
-            for prompt_id in manifest.prompt_ids:
-                client.cancel(prompt_id)
+            histories = [client.history(pid) for pid in manifest.prompt_ids]
+            self._remember_outputs(manifest, client, histories)
+            terminal = [
+                bool(h and (h.get("status", {}).get("completed")
+                            or h.get("status", {}).get("status_str") == "error"))
+                for h in histories
+            ]
+            if histories and all(terminal):
+                errors = [h for h in histories if h.get("status", {}).get("status_str") == "error"]
+                if errors:
+                    manifest.error_category = "ComfyExecutionError"
+                    manifest.error_detail = str(errors[0].get("status", {}))
+                if manifest.status == JobStatus.SUBMITTED:
+                    self.store.transition(manifest, JobStatus.QUEUED)
+                target = JobStatus.FAILED if errors or manifest.error_category else JobStatus.COMPLETED
+                return self.store.transition(manifest, target, manifest.error_detail)
+            for prompt_id, done in zip(manifest.prompt_ids, terminal, strict=True):
+                if not done:
+                    client.cancel(prompt_id)
+            try:
+                self._remember_outputs(
+                    manifest, client, [client.history(pid) for pid in manifest.prompt_ids]
+                )
+            except StudioError:
+                # Cancellation was accepted; a failed follow-up observation must not undo it.
+                pass
         self.store.transition(manifest, JobStatus.CANCELLED)
         return manifest
+
+    def _remember_outputs(
+        self, manifest: JobManifest, client: ComfyClient, histories: list[dict | None],
+    ) -> None:
+        available = list(dict.fromkeys([
+            *manifest.output_files,
+            *(str(path) for history in histories if history for path in client.output_paths(history)),
+        ]))
+        if available != manifest.output_files:
+            manifest.output_files = available
+            self.store.save(manifest)
 
     def refresh(self, job_id: str) -> JobManifest:
         """Reconcile a persisted job with ComfyUI, including after a studio restart."""
@@ -134,17 +177,7 @@ class GenerationService:
             return manifest
         with ComfyClient(self.settings) as client:
             histories = [client.history(prompt_id) for prompt_id in manifest.prompt_ids]
-            available = list(
-                dict.fromkeys(
-                    str(path)
-                    for history in histories
-                    if history
-                    for path in client.output_paths(history)
-                )
-            )
-            if available != manifest.output_files:
-                manifest.output_files = available
-                self.store.save(manifest)
+            self._remember_outputs(manifest, client, histories)
             for history in histories:
                 if history and history.get("status", {}).get("status_str") == "error":
                     manifest.error_category = "ComfyExecutionError"

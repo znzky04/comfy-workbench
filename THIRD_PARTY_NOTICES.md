@@ -7,17 +7,31 @@ images, character rights or a generation pipeline as a whole.
 
 ## Included configurations and patches
 
-- On 2026-10-26 the maintainer confirmed that the workflow canvases/API graphs and
-  `comfyui-anima-incontext` node were self-authored. The original configuration graphs
-  and original compatibility edits in this repository are included under MIT on that
-  declaration. Node types and model names refer to separately supplied components;
-  the graph licence does not grant permission to use those components or their outputs.
+- Correction on 2026-10-26: the maintainer clarified that **some workflows were downloaded
+  online and their authors could not be identified**. The earlier statement that all
+  graphs were self-authored is withdrawn. Until provenance is established per file,
+  `workflows/api/*.json`, root workflow JSON and their corresponding original canvases
+  are **excluded from this project's MIT grant**. Availability for download is not
+  evidence of permission to redistribute or relicense. No author or licence is invented.
+  The full repository remains private; this notice alone does not resolve redistribution
+  permission. Original local graphs are retained unchanged for private use and inspection.
+- The affected subset is not yet mapped to individual graphs. Treat all five registered
+  graphs (Anima standard/HQ, Animagine standard, Larkie img2img/incontext) as provenance
+  pending for public distribution. Future options are to identify compatible original
+  terms, omit unverified graphs from a separately reviewed publication, or independently
+  author replacements. None of these options has silently altered the local workflows.
+- The original compatibility edits remain MIT. The earlier separate declaration that
+  the reference node was self-authored has not been independently verified; the latest
+  correction specifically concerns downloaded workflows. Node types and model names
+  refer to separately supplied components and grant no model or output rights.
 - `integrations/dsh/patches/*.diff` contains original compatibility edits and context
   from that self-authored installed node; the full node is not bundled here. The local
   directory has no independent Git remote. Its parent ComfyUI remote is **not** evidence
   of the node's provenance. An online similarly named directory returned HTTP 401 and
   was not used to claim ownership or copy new material. Attribution here relies on the
   maintainer's explicit declaration, not on an independently verified publication history.
+
+GitHub's general licensing guidance: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository
 - Historical workflow names, benchmark prompts and hashes are records, not grants of
   rights to original characters, anime IP, models or reference images.
 

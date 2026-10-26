@@ -156,6 +156,8 @@ class WorkflowRegistry:
             raise WorkflowValidationError(f"{definition.workflow_id} 必须提供参考图")
         if definition.mode not in {"img2img", "incontext"} and request.input_images:
             raise WorkflowValidationError(f"{definition.workflow_id} 不接受参考图")
+        if len(request.input_images) > 1:
+            raise WorkflowValidationError("当前注册工作流只支持一张参考图，不会静默忽略其他图片。")
 
         seed = request.seed
         if seed is None or seed == -1:

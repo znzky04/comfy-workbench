@@ -124,19 +124,18 @@ class ComfyClient:
             item = self.history(prompt_id)
             if item is not None:
                 status = item.get("status", {})
-                if status.get("status_str") == "error" or status.get("completed") is False:
+                if status.get("status_str") == "error":
                     raise JobError(f"ComfyUI 任务失败：{status}")
-                return item
+                if status.get("completed") is True:
+                    return item
             time.sleep(1)
         raise JobError(f"等待 ComfyUI 任务超时（{timeout:.0f}s）：{prompt_id}")
 
     def cancel(self, prompt_id: str) -> None:
-        queue = self.queue()
-        running = {str(item[1]) for item in queue.get("queue_running", []) if len(item) > 1}
-        if prompt_id in running:
-            self._request("POST", "/interrupt")
-        else:
-            self._request("POST", "/queue", json={"delete": [prompt_id]})
+        # Remove the queued item first, then cover the race where it started meanwhile.
+        # The validated ComfyUI 0.42.x backend checks prompt_id before interrupting.
+        self._request("POST", "/queue", json={"delete": [prompt_id]})
+        self._request("POST", "/interrupt", json={"prompt_id": prompt_id})
 
     def output_paths(self, history_item: dict[str, Any]) -> list[Path]:
         paths: list[Path] = []
@@ -152,9 +151,14 @@ class ComfyClient:
                         root = self.settings.paths.canonical_output_root.parent
                     elif artifact_type == "input":
                         root = self.settings.paths.canonical_input_root
+                    elif artifact_type == "temp":
+                        root = self.settings.paths.workspace / "temp"
                     else:
-                        root = self.settings.paths.workspace / artifact_type
-                    paths.append((root / subfolder / filename).resolve())
+                        raise JobError("ComfyUI 输出路径包含未知存储类型")
+                    path = (root / subfolder / filename).resolve()
+                    if not path.is_relative_to(root.resolve()):
+                        raise JobError("ComfyUI 输出路径超出对应存储目录")
+                    paths.append(path)
         return paths
 
     def installed_dependencies(self, names: list[str]) -> dict[str, bool]:

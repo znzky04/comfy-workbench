@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -34,6 +36,8 @@ class ManifestStore:
         self.root = root
 
     def path_for(self, job_id: str, created_at: datetime | None = None) -> Path:
+        if re.fullmatch(r"[A-Za-z0-9_-]{1,128}", job_id) is None:
+            raise JobError("非法任务 ID")
         if created_at is None:
             matches = list(self.root.glob(f"*/*/{job_id}.json"))
             if matches:
@@ -44,10 +48,23 @@ class ManifestStore:
     def save(self, manifest: JobManifest) -> Path:
         path = self.path_for(manifest.job_id, manifest.created_at)
         path.parent.mkdir(parents=True, exist_ok=True)
-        temp = path.with_suffix(".json.tmp")
         payload = manifest.model_dump_json(indent=2)
-        temp.write_text(payload + "\n", encoding="utf-8")
-        os.replace(temp, path)
+        # Unique names avoid collisions between concurrent writers of the same job.
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=path.parent, prefix=f".{manifest.job_id}.",
+            suffix=".tmp", delete=False,
+        ) as handle:
+            temp = Path(handle.name)
+            try:
+                handle.write(payload + "\n")
+            except BaseException:
+                handle.close()
+                temp.unlink(missing_ok=True)
+                raise
+        try:
+            os.replace(temp, path)
+        finally:
+            temp.unlink(missing_ok=True)
         return path
 
     def load(self, job_id: str) -> JobManifest:

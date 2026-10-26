@@ -57,3 +57,11 @@ def test_manifest_keeps_benchmark_evaluation(tmp_path: Path) -> None:
     assert loaded.benchmark_task_id == "steampunk-engineer"
     assert loaded.human_evaluation is not None
     assert loaded.human_evaluation.overall_1_to_5 == 4
+
+
+@pytest.mark.parametrize("job_id", ["../escape", "*", "one/two", "C:\\outside", ""])
+def test_manifest_rejects_path_or_glob_as_job_id(tmp_path, job_id):
+    store = ManifestStore(tmp_path)
+    with pytest.raises(JobError, match="非法任务 ID"):
+        store.path_for(job_id)
+    assert list(tmp_path.iterdir()) == []
