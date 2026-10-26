@@ -14,7 +14,9 @@ from types import SimpleNamespace
 import torch
 import torch.nn.functional as F
 
-ROOT = Path(os.environ.get("COMFYUI_TEST_ROOT", "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI"))
+if not os.environ.get("COMFYUI_TEST_ROOT"):
+    raise SystemExit("Set COMFYUI_TEST_ROOT to your existing ComfyUI installation first.")
+ROOT = Path(os.environ["COMFYUI_TEST_ROOT"])
 
 
 def definitions(path, names, namespace):

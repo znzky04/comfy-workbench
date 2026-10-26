@@ -17,6 +17,8 @@
 
 from __future__ import annotations
 
+raise SystemExit("历史实现已禁用。请在仓库根目录运行 comfy-demo watch。")
+
 import json
 import random
 import shutil

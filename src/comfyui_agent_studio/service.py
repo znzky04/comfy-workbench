@@ -47,6 +47,7 @@ class GenerationService:
                 client.health()
                 uploaded = [client.upload_image(path) for path in request.input_images]
                 resolved: list[dict] = []
+                manifest.resolved_parameters = {"runs": resolved, "uploaded_images": uploaded}
                 for index in range(request.count):
                     _, workflow, parameters = self.registry.prepare(
                         request, manifest.job_id, index, uploaded
@@ -59,8 +60,11 @@ class GenerationService:
                     if manifest.prompt_id is None:
                         manifest.prompt_id = prompt_id
                     resolved.append(parameters)
-                manifest.resolved_parameters = {"runs": resolved, "uploaded_images": uploaded}
-                self.store.transition(manifest, JobStatus.SUBMITTED)
+                    # Persist each accepted identity before the next network request.
+                    if manifest.status == JobStatus.CREATED:
+                        self.store.transition(manifest, JobStatus.SUBMITTED)
+                    else:
+                        self.store.save(manifest)
                 self.store.transition(manifest, JobStatus.QUEUED)
                 if wait:
                     return self.wait(manifest.job_id, client=client)
@@ -68,6 +72,11 @@ class GenerationService:
         except Exception as exc:
             manifest.error_category = type(exc).__name__
             manifest.error_detail = str(exc)
+            if manifest.prompt_ids and manifest.status == JobStatus.SUBMITTED:
+                manifest.error_category = "PartialSubmissionError"
+                self.store.transition(manifest, JobStatus.QUEUED, str(exc))
+                # Keep observing accepted prompts; do not retry the missing submissions.
+                raise
             if manifest.status not in {JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED}:
                 self.store.transition(manifest, JobStatus.FAILED, str(exc))
             raise
@@ -76,6 +85,10 @@ class GenerationService:
         manifest = self.store.load(job_id)
         if manifest.status in {JobStatus.COMPLETED, JobStatus.FAILED, JobStatus.CANCELLED}:
             return manifest
+        if manifest.status == JobStatus.SUBMITTED and len(manifest.prompt_ids) < manifest.request.get(
+            "count", 1
+        ):
+            raise JobError("批次提交尚未完成；请在工作台观察已接受任务，不要重复提交。")
         owned_client = client is None
         client = client or ComfyClient(self.settings)
         try:
@@ -87,7 +100,11 @@ class GenerationService:
                 manifest.output_files = list(dict.fromkeys(outputs))
                 self.store.save(manifest)
             manifest.output_files = list(dict.fromkeys(outputs))
-            self.store.transition(manifest, JobStatus.COMPLETED)
+            target = (
+                JobStatus.FAILED if manifest.error_category == "PartialSubmissionError"
+                else JobStatus.COMPLETED
+            )
+            self.store.transition(manifest, target, manifest.error_detail)
             return manifest
         except Exception as exc:
             manifest.error_category = type(exc).__name__
@@ -133,7 +150,21 @@ class GenerationService:
                     manifest.error_category = "ComfyExecutionError"
                     manifest.error_detail = str(history.get("status", {}))
                     return self.store.transition(manifest, JobStatus.FAILED, manifest.error_detail)
+            if manifest.status == JobStatus.SUBMITTED:
+                if len(manifest.prompt_ids) < manifest.request.get("count", 1):
+                    # Submission may still be active in another thread. After a crash,
+                    # retain identity/output and time out rather than resubmit or claim success.
+                    if (
+                        datetime.now(UTC) - manifest.created_at
+                    ).total_seconds() > self.settings.comfyui.job_timeout_seconds:
+                        manifest.error_category = "IncompleteSubmission"
+                        manifest.error_detail = "批次提交未完成；已保留已接受任务，不自动补交。"
+                        self.store.transition(manifest, JobStatus.FAILED, manifest.error_detail)
+                    return manifest
+                self.store.transition(manifest, JobStatus.QUEUED)
             if all(history and history.get("status", {}).get("completed") for history in histories):
+                if manifest.error_category == "PartialSubmissionError":
+                    return self.store.transition(manifest, JobStatus.FAILED, manifest.error_detail)
                 return self.store.transition(manifest, JobStatus.COMPLETED)
             queue = client.queue()
             running = {str(row[1]) for row in queue.get("queue_running", [])}

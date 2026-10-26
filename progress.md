@@ -99,3 +99,11 @@
 - 应用 `comfyui-anima-incontext-comfyui-0.42.3.diff`（用户关闭 Desktop 后备份并应用，`git apply --check` 与应用均 clean，`py_compile` 通过，节点目录无自带测试）。
 - DSH 额外 in-context 测试在 KSampler 失败：`'AttentionTensorContainer' object has no attribute 'shape'`，prompt `3c705098…`，manifest 已保存为失败记录（`benchmark_task_id=null`，不计入正式任务）。
 - 判定补丁只解决第一层（`preferred_attention`），第二层需要容器解包；按用户选择“B 保持现状、交回 Codex”，已写 `docs/M5_CODEX_HANDOFF_FROM_DSH.md`。M5 仍未通过，M6/M7 门禁保持锁定。
+# 2026-10-26 公开准备开始
+
+- 用户授权逐项实施公开准备，保持仓库私有；仅处理工程目录，网站由另一聊天维护。
+- 已读取现有计划/发现/进度，开始 P1 隐私与来源核验。不会重跑生图或修改安装中的 ComfyUI。
+- 通用配置、本机配置保全、离线测试隔离、legacy 入口保护和提交恢复修复完成。
+- 当前完整测试 43 passed、无警告；Ruff、离线示例、5 条工作流静态检查、12 画布和 2 参考绑定哈希检查通过。
+- 新建隔离环境 clean-d9b974bc46 安装与离线检查通过；同环境刷新最终源码后再次通过 43 项测试。证据保存在忽略目录 runs/public-readiness。
+- 自有代码采用 MIT；来源依据用户明确声明；全历史规则扫描未命中常见凭据或大文件。下一步准备独立清理镜像与可恢复 bundle，推送前展示结果。

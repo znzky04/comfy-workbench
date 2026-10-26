@@ -1,5 +1,9 @@
 # 星夜绘图室：本地工作台
 
+2026-10-26 公开准备补充：通用配置、离线验收与新测试统计见 `docs/PUBLIC_RELEASE_READINESS.md`。
+本机路径保全于忽略的配置；TestClient 既有弃用警告已通过 httpx2 开发依赖解决。
+以下带日期的 GPU/浏览器结果保持为历史验收，本轮没有新生图。
+
 ## 启动与停止
 
 1. 用户手动打开 ComfyUI Desktop，等待 8188 可连接。
@@ -50,9 +54,9 @@ cd E:\AI\Deepseek\comfyui-demo
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
 .\.venv\Scripts\ruff.exe check src tests scripts
-.\.venv\Scripts\python.exe scripts/check_studio_browser.py
+.\.venv\Scripts\python.exe scripts/check_studio_browser.py --reference-image <本机参考图路径>
 # 显式运行真实双图测试（会生成并保留两张新图）：
-.\.venv\Scripts\python.exe scripts/check_studio_browser.py --generate
+.\.venv\Scripts\python.exe scripts/check_studio_browser.py --reference-image <本机参考图路径> --generate
 ```
 
 ## 当前边界

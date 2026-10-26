@@ -11,6 +11,8 @@ anima_t2i.json → 提交 → 轮询 → 把图下载到 output/ → 网页里�
 
 from __future__ import annotations
 
+raise SystemExit("历史实现已禁用。请在仓库根目录运行 comfy-demo studio；Desktop 需手动启动。")
+
 import json
 import os
 import queue

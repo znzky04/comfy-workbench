@@ -87,14 +87,17 @@ class Settings(BaseModel):
 
     @model_validator(mode="after")
     def resolve_paths(self) -> Settings:
-        for field_name in ("workflow_root", "manifest_root"):
+        for field_name in (
+            "workflow_root", "manifest_root", "workspace", "canonical_input_root",
+            "canonical_output_root",
+        ):
             value = getattr(self.paths, field_name)
             if not value.is_absolute():
                 setattr(self.paths, field_name, (self.project_root / value).resolve())
-        self.paths.workspace = self.paths.workspace.resolve()
-        self.paths.canonical_input_root = self.paths.canonical_input_root.resolve()
-        self.paths.canonical_output_root = self.paths.canonical_output_root.resolve()
-        self.paths.model_roots = [path.resolve() for path in self.paths.model_roots]
+        self.paths.model_roots = [
+            (path if path.is_absolute() else self.project_root / path).resolve()
+            for path in self.paths.model_roots
+        ]
         return self
 
 
@@ -119,7 +122,12 @@ def _read_toml(path: Path) -> dict[str, Any]:
 def load_settings(config_path: Path | None = None) -> Settings:
     example = PROJECT_ROOT / "config.example.toml"
     raw = _read_toml(example)
-    local = config_path or (PROJECT_ROOT / "config.local.toml")
+    selected = os.environ.get("COMFY_DEMO_CONFIG")
+    local = config_path or (Path(selected) if selected else PROJECT_ROOT / "config.local.toml")
+    if not local.is_absolute():
+        local = PROJECT_ROOT / local
+    if (config_path is not None or selected) and not local.is_file():
+        raise ConfigurationError(f"配置文件不存在：{local}")
     if local.exists():
         raw = _merge(raw, _read_toml(local))
 

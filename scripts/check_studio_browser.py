@@ -10,6 +10,7 @@ from playwright.sync_api import sync_playwright
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--generate", action="store_true", help="Submit one real two-image job")
+parser.add_argument("--reference-image", type=Path, required=True, help="Existing local reference image")
 args = parser.parse_args()
 artifacts = Path("runs/browser-check") / uuid.uuid4().hex[:12]
 artifacts.mkdir(parents=True, exist_ok=True)
@@ -33,7 +34,7 @@ with sync_playwright() as playwright:
     assert page.locator(".art-card").count() >= 3
     page.locator(".art-card").first.click()
     assert page.locator("#artifact-dialog").is_visible()
-    assert page.locator("#dialog-path").input_value().startswith("E:\\")
+    assert Path(page.locator("#dialog-path").input_value()).is_absolute()
     page.get_by_role("button", name="关闭 ×").click()
     page.get_by_role("button", name="全部记录", exact=True).click()
     page.evaluate("document.activeElement.blur(); window.scrollTo(0,0)")
@@ -42,7 +43,7 @@ with sync_playwright() as playwright:
     page.locator("#reference-box").wait_for(state="visible")
     with page.expect_response(lambda r: r.url.endswith("/api/uploads") and r.status == 200):
         page.locator("#reference").set_input_files(
-            "E:/AI/ComfyUI-Workspace/ComfyUI/ComfyUI/input/larkie_reference_key_art.webp"
+            str(args.reference_image.resolve())
         )
     page.wait_for_function(
         "document.querySelector('#reference-status').textContent.includes('已上传')"

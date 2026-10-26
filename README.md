@@ -2,6 +2,47 @@
 
 一个本地优先、可追溯的 ComfyUI 多入口控制工程。Codex、DSH、CLI、热文件夹和星夜网页工作台共享同一份版本化注册表、参数校验、任务状态与输出规则。
 
+**状态：v0.1 公开准备中，仓库目前仍私有。** 自有代码及作者确认的自有工作流采用 [MIT](LICENSE)；模型、第三方组件和图片不随仓库分发，见 [归属与许可边界](THIRD_PARTY_NOTICES.md)。无需演示视频。
+
+## 先离线试用（无需 GPU / ComfyUI / 模型）
+
+支持从源码仓库安装；暂不提供 PyPI、桌面安装包或脱离源码目录的 wheel 发行。
+Python 3.11+；以下为 PowerShell，macOS/Linux 使用 `.venv/bin/python` 与相应激活方式。
+
+```powershell
+git clone https://github.com/znzky04/comfyui-agent-studio.git
+cd comfyui-agent-studio
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install "hatchling>=1.27" "editables>=0.5"
+.\.venv\Scripts\python.exe -m pip install --no-build-isolation -e ".[web,dev]"
+.\.venv\Scripts\python.exe examples/offline_review.py
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m ruff check src tests scripts examples
+.\.venv\Scripts\comfy-demo.exe workflow validate --all
+```
+
+私有期间克隆仍需要访问权限。常规测试与示例不连接 ComfyUI，不需要作者的画布、参考图或本机目录。离线检查与 GPU 验收分开；本轮未重新生图。CI 已配置 Windows/Linux、Python 3.11/3.13，远程实际运行状态以 GitHub Actions 为准。
+
+## 连接你自己的 ComfyUI
+
+复制 `config.example.toml` 为被 Git 忽略的 `config.local.toml`，填写实际的工作区、input、output 和模型目录。Desktop 的共享图库可能不在工作区内，必须使用它实际配置的路径。相对路径统一以仓库为基准。模板中的 `../ComfyUI` 只是示例，不会创建或启动实例。
+
+配置优先级：模板 → 指定配置文件（或默认本机配置）→ 环境覆盖。可以用 `COMFY_DEMO_CONFIG` 选择配置；环境覆盖包括 `COMFY_DEMO_COMFYUI_URL`、`COMFY_DEMO_WORKSPACE`、`COMFY_DEMO_OUTPUT_ROOT`、`COMFY_DEMO_WEB_HOST`、`COMFY_DEMO_WEB_PORT`。
+
+手动准备 `workflows/registry.json` 声明的模型与节点并核对各自许可。项目不会自动下载；未安装参考节点的用户可先使用与环境匹配的文生图工作流。然后自行启动 Desktop，运行 `comfy-demo doctor`，检查配置、依赖与连接后再使用 `comfy-demo studio`。
+
+## 已知限制
+
+- Windows Desktop 是已有 GPU 验收环境；Linux 离线 CI 不等于 Linux GPU 支持证明。
+- DSH v0.1.2 参数契约已验，UI 重导入待验收；DSH 的项目 manifest 需要 Agent 补录。
+- 拉琪 in-context 是实验功能：技术运行成功，身份、服装与星环仍未通过视觉验收；完整自有参考节点不随库提供。
+- Web 仅限本机单用户；SSE 提供任务阶段，不是逐采样步百分比。见 [安全边界](SECURITY.md)。
+- 多图逐个提交；已收到的任务 ID 与参数立即保存。提交失败会继续观察已接受任务并最终标记批次失败；提交中进程退出则保留可查询任务，等待观察超时，不自动补交。远端接受请求到本地收到并保存响应之间仍有不可消除的崩溃窗口，不能保证恰好一次提交。
+- `showcase export` 为明确禁用的兼容占位，不是可用的导出功能。
+- `legacy` 的 Python 和批处理入口已禁用；只供历史阅读。原始图片与画布文件均保留。
+
+发布准备与验证证据见 [PUBLIC_RELEASE_READINESS.md](docs/PUBLIC_RELEASE_READINESS.md)。
+
 ## 最重要的边界
 
 - 请由用户手动启动、停止和更新 ComfyUI Desktop。
@@ -26,7 +67,7 @@ py -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[web,dev]"
 ```
 
-如需本机覆盖，复制 `config.example.toml` 为 `config.local.toml`；该文件不会进入 Git。
+本节 E 盘路径是维护者的历史安装记录；新用户按上面的通用快速开始配置自己的目录。本机配置不会进入 Git。
 
 ## 常用命令
 

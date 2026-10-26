@@ -17,3 +17,12 @@
 - 新增 DSH preset v1 构建/校验、5 个技能说明和 Codex comfy-mcp runbook。
 - 建立 2 拉琪、3 热门角色、3 原创角色的真实生成验收集。
 - 保留全部旧图片和旧入口源码；新流程不复制或自动删除图片。
+
+## 2026-10-26 — Public-readiness engineering (repository remains private)
+
+- Add MIT for original materials, upstream notices, local security/contribution docs and offline CI.
+- Make configuration project-relative and keep machine overrides ignored; isolate offline tests from private originals.
+- Persist each accepted prompt and parameters before the next submission; observe partial failures without resubmission.
+- Disable archived Python/batch entry points and require explicit reference paths in manual integration scripts.
+- Use httpx2 for TestClient; add clean-install, local-baseline, redacted audit and private-history preparation tools.
+- No model/image generation, image deletion, original graph edits, website changes or visibility changes.

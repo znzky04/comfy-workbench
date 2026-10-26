@@ -12,6 +12,8 @@
 
 from __future__ import annotations
 
+raise SystemExit("历史实现已禁用。请使用仓库根目录的 run_comfy.py 或 comfy-demo run。")
+
 import argparse
 import json
 import random

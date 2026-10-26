@@ -19,7 +19,7 @@ app = typer.Typer(help="ComfyUI Agent Studio：连接用户手动管理的 Comfy
 workflow_app = typer.Typer(help="查看和校验版本化工作流。")
 job_app = typer.Typer(help="查看、等待和取消任务。")
 dsh_app = typer.Typer(help="构建和校验 DSH preset v1 包。")
-showcase_app = typer.Typer(help="人工批准的公开样例导出。")
+showcase_app = typer.Typer(help="未实现：公开导出兼容占位，不会复制图片。")
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(job_app, name="job")
 app.add_typer(dsh_app, name="dsh")
@@ -187,7 +187,7 @@ def dsh_verify(path: Path) -> None:
 @showcase_app.command("export")
 def showcase_export(selection_file: Path) -> None:
     typer.echo(
-        f"公开导出受 M5/M6 门禁保护。已读取选择文件参数：{selection_file}；当前不会复制任何图片。"
+        f"公开导出尚未实现。收到参数：{selection_file}；未读取审批内容，不会复制任何图片。"
     )
     raise typer.Exit(2)
 

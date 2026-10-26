@@ -1,0 +1,70 @@
+# v0.1 公开准备与维护验收
+
+更新：2026-10-26。目标是可安装、可离线验证的本地单用户工具；不是公网生成服务。
+本文件记录工程准备，不授权把仓库改为公开，也不授权强推。网站由另一个聊天负责。
+
+## 已落实
+
+- [x] 自有代码采用 MIT。作者明确声明工作流与参考节点为自己编写/搭建；记录在 `THIRD_PARTY_NOTICES.md`，没有据此重授权模型、第三方节点或角色图片。
+- [x] 当前源码与可达历史进行常见凭据规则扫描；未命中所设规则，未发现已提交的图像、模型权重或 ZIP。报告仅在忽略的 `runs/public-readiness`，不自动公开。
+- [x] 人工检查了 API 图中的默认提示词/参考图名与当前审批清单；无参考图二进制或运行 manifest 入库。历史文档保留部分环境路径与任务 ID，它们不是访问凭据。只展示批准的海梦单图，不扩大授权。
+- [x] 通用模板不再依赖作者 E 盘。现有实际路径保全在忽略的 `config.local.toml`，配置中所有相对路径按仓库根目录解析。
+- [x] 默认 pytest 不读取作者的 12 个外部画布和私人参考图。元数据契约仍校验；实际文件哈希由独立只读脚本显式检查。
+- [x] 4 个 legacy Python 入口与 2 个历史 bat 禁用，防止误运行旧自动启动、私有库读取或下载副本路径。根目录兼容入口继续使用统一核心。
+- [x] 接受每个远端任务后立即保存 ID、实际参数；中途失败继续观察已接受部分，批次最终标记失败，保留输出且不补交。
+- [x] 提交中进程退出的记录保持可查询：观察已接受部分，超时标明 IncompleteSubmission。不能把未提交完的批次当成功。网络响应前的未知接受状态仍不能保证恰好一次。
+- [x] TestClient 改用独立开发依赖 httpx2，保留运行时 HTTPX。没有降级或改动 ComfyUI 环境来消除警告。
+- [x] CI 配置 Windows/Linux × Python 3.11/3.13 离线检查；不需要 GPU、模型、私人图片或外部节点。
+- [x] README 明确源码 editable 安装、配置优先级、安全边界、未实现出口和实验工作流；补充 SECURITY / CONTRIBUTING / 上游归属。
+- [x] 后续本机 Git 提交邮箱设为通过 GitHub 账号 ID 核对的 noreply，仅修改本仓库配置。
+
+## 验证命令与证据
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m ruff check src tests scripts examples
+.\.venv\Scripts\python.exe examples/offline_review.py
+.\.venv\Scripts\comfy-demo.exe workflow validate --all
+.\.venv\Scripts\python.exe scripts/check_clean_install.py
+.\.venv\Scripts\python.exe scripts/audit_repository.py --report runs/public-readiness/privacy-audit.json
+```
+
+干净安装脚本仅复制 Git 管理/未忽略的源码，创建独立虚拟环境，不带 `.venv`、`config.local.toml`、画布原件、图库和参考图。通过 PyPI 安装依赖，需要网络；测试与示例本身离线。构建依赖显式安装后使用 `--no-build-isolation`，避免维护者环境的隔离构建下载长时间无输出。首次失败记录保留，不能计为通过。
+
+本机原件另行检查，路径由操作者显式指定：
+
+```powershell
+.\.venv\Scripts\python.exe scripts/check_local_baselines.py --source-root <原始画布目录> --reference-root <参考图目录>
+```
+
+维护者 12 条画布和 2 处参考绑定已只读核验，哈希保持不变。该检查不放入公共 CI，也不删除/改动原件。
+
+完整本轮结果、干净环境路径与历史清理审阅结果由下方最终记录追加。历史 33 项是此前验收，不能作为新源码的测试数量；历史 GPU/浏览器结果仍保留原日期，本轮没有新的 GPU 验收。
+
+### 2026-10-26 实际结果
+
+- 当前源码：43 passed，无警告；Ruff 通过，离线示例通过，5 条 API 静态校验零错误。
+- 独立 Windows / Python 3.13 环境：`runs/public-readiness/clean-d9b974bc46`；从空环境安装，未复制本机配置和参考图。安装的 Pydantic 2.14.1 与原环境 2.13.4 不同，实际测试仍通过。
+- 独立环境刷新最终源码后再次 43 passed；Ruff、离线示例、5 条 API 静态校验与 `pip check` 均通过。`final-*.log` 及源码哈希清单保留于该目录。
+- 仓库目录以外的 CLI 工作流列表查询通过。首个隔离构建失败目录保留为证据，不计入通过。
+- 未运行 Linux / Python 3.11 / 浏览器 / GPU 新验收；CI 矩阵等更新私有远端后执行。
+- 本轮临时环境与报告约 111 MiB；E 盘余量仍充足，图片未增删。
+
+## 公开前的最后步骤
+
+1. 审阅邮箱清理后的历史：作者/提交者仅为 noreply，主分支内容树、提交数量与原来一致；私有 bundle 已验证可恢复。
+2. 用户审阅后再明确授权远端历史替换。推送前重新核对远端 main 未被其他聊天更新，不无条件覆盖他人提交。
+3. 私有远端运行一次 CI 矩阵，确认各环境实际通过。仅新增 workflow 文件不等于远端 CI 通过。
+4. 维护者在 GitHub 检查并按可用能力开启 private vulnerability reporting / push protection。此轮不修改托管安全设置。
+5. 另行确认仓库公开。未经授权不改可见性、不部署网站、不发布模型/图片或安装包。
+
+## 可带限制公开的功能
+
+- DSH v0.1.2 UI 重导入尚未执行，标为待验收；生成 ZIP/官方参数函数验证不等于 UI 验收。没有启动 DSH 或擅自重跑生图。
+- 拉琪 in-context 技术通过、视觉不合格，保留为实验能力。完整参考节点未分发，第三方克隆者需要自行准备兼容依赖。
+- `showcase export` 是明确返回错误的未实现占位，已从可用功能承诺中排除；不要求为了公开而新增一套导出系统。
+- 不承诺跨设备像素级复现、跨机器事务、多人协作或自动内容审核。
+
+## 回滚
+
+源码按 Git 提交审阅和 revert；不要 hard reset 或清理工作区。忽略的本机配置恢复原路径即可。历史清理先在独立镜像进行，不改源仓库引用或远端；`before.bundle` 是私有备份，包含原邮箱，绝不能作为公开发行资产。临时安装、日志和镜像保留在 runs/public-readiness，手动审阅后可只清理自己创建的验收目录，不能清理图片/参考图/画布。

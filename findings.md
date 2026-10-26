@@ -65,3 +65,20 @@
 - 技术栈为 React 19、Vite、React Router、Tailwind、GSAP/Motion。
 - 当前分支为 `codex/larkie-web-pet`，存在未跟踪 `scripts/`，M7 不得覆盖。
 - 项目内容由 `src/content/projects.ts` 统一提供，现有四个项目的内容契约必须保留。
+# 2026-10-26 公开准备发现
+
+- 用户确认原画布/API 图和参考节点为自行编写/搭建；许可清单据此记录作者声明，不再把同名受限在线目录视为来源。
+- 干净环境首次 editable 安装停留在隔离构建 hatchling 下载；只停止了已核对路径的自建安装子进程，保留日志。改为显式安装 hatchling/editables 后 --no-build-isolation，防止隐藏构建子进程无输出等待。
+- 安装 httpx2 开发依赖后完整 41 passed、无警告；Ruff 通过。
+
+- 142 个可达历史 blob 与当前源码的规则扫描未命中常见令牌/私钥或图像/权重/ZIP。扫描非全面安全证明；报告在忽略的 runs/public-readiness。
+- 历史存在个人邮箱；用户授权清理，强推前需审阅。自有代码选择 MIT。
+- Anima 官方模型卡标注非商业许可；Animagine 官方卡为 Open RAIL++-M。节点疑似来源页面返回 401，无法证明来源/代码许可；第三方补丁与配置图仍有来源核实门槛。
+- 新增提交恢复测试在旧实现中 2 项失败，证明首个 prompt_id 尚未持久化；修复后定向 20 项通过。
+- 完整 41 项通过，旧 1 项警告待 httpx2 开发依赖安装后复测；12 画布与 2 参考绑定的本机只读哈希检查通过。
+- apply_patch 首次因重复文件操作被拒，未产生写入，合并为单个文件操作后完成；Ruff 的 subprocess check 参数遗漏已修复。
+
+- 基线为 main d2cb5d9；接手工作区干净，远端私有。现有离线测试依赖本机画布目录与固定路径，不适合直接作为公共 CI。
+- config.example.toml 含作者路径；legacy 中仍含自动启动旧代码。正式入口没有调用它们。
+- 上游 in-context 节点目录不是独立 Git 仓库，git -C remote 返回的是父 ComfyUI 镜像，不能作为节点来源证据；需从节点 README/清单核对。
+- 初查时尚未完成历史秘密扫描与许可归属核验；最终扫描与用户声明见公开准备报告。

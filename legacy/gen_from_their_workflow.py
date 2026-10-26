@@ -10,6 +10,8 @@
 
 from __future__ import annotations
 
+raise SystemExit("历史实现已禁用。请使用根目录兼容入口；不读取 DSH 私有工作流库。")
+
 import argparse
 import copy
 import json
