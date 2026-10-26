@@ -7,6 +7,19 @@ images, character rights or a generation pipeline as a whole.
 
 ## Included configurations and patches
 
+### Downloaded workflows / 下载工作流
+
+| 项目 | 当前记录 |
+| --- | --- |
+| 原作者 / Original author | 未知 / Unknown |
+| 来源 / Source | 网上下载，原始链接待追溯 / Downloaded online; original URL unconfirmed |
+| 许可证 / License | 未确认 / Unconfirmed |
+| 本项目 MIT 授权范围 | 不包含这些下载工作流及其来源未确认的派生配置 |
+
+此记录仅针对来源未确认的下载工作流；目前尚未逐项确定对应文件。
+“作者未知”是署名状态，不是一种许可证，也不表示原作者放弃权利或已授权转载。
+不将这些工作流描述为本项目原创，不替原作者授予 MIT 或其他使用许可。
+
 - Correction on 2026-10-26: the maintainer clarified that **some workflows were downloaded
   online and their authors could not be identified**. The earlier statement that all
   graphs were self-authored is withdrawn. Until provenance is established per file,
